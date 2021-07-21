@@ -1,0 +1,24 @@
+DONE
+
+La carga de una prescripcion debe vincular un residente de la tabla 'residents' y una medicación de la tabla 'vademecum'. 
+
+Una nueva prescripción debe generar un registro en la tabla 'prescriptions_regitry' y en la tabla 'prescriptions'.
+    - Buscar y vincular residente
+    - Buscar y vincular medicación
+
+Editar una prescripción existente debe a generar un registro en la tabla 'prescriptions_registry' y editar dicha prescripción de la tabla 'prescriptions'.
+    - Buscar y vincular residente
+    - Buscar y vincular medicación
+    - Buscar en la tabla 'prescriptions' un registro que conincida con los datos del residente y muestre una lista de las prescripciones que tiene. Dar opción de editar una prescripción
+    existente o crear una nueva.
+
+La carga de un ingreso de medicación debe vincular un residente de la tabla 'residents' y una medicación de la tabla 'vademecum'.
+El ingreso de medicación va a generar un registro en la tabla 'stock_registry' y actualizar el valor de disponibilidad de esa medicación en la tabla 'prescriptions'.
+    - Buscar y vincular residente
+    - Buscar y vincular medicación
+    - Estos registros se pueden modificar? O la forma de modificarlos es a través de un 'ajuste'?
+
+
+TO DO
+
+Visualizar stock de medicamentos por residente.
