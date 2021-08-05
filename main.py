@@ -6,15 +6,22 @@ from src.prescription import get_prescriptions_list, get_prescription_by_id, edi
 from src.stock import get_stock_from_value, get_stock_by_id, edit_db_stock, create_new_medication_stock
 from src.substraction import substract_from_breakfast, substract_from_lunch, substract_from_tea, substract_from_dinner
 from apscheduler.schedulers.background import BackgroundScheduler
-import schedule
 import unittest
-import time
-
-
-scheduler = BackgroundScheduler()
+import atexit
 
 
 app = create_app()
+
+
+@app.before_first_request
+def start_scheduler():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(substract_from_breakfast, "cron", hour="9")
+    scheduler.add_job(substract_from_lunch, "cron", hour="12")
+    scheduler.add_job(substract_from_tea, "cron", hour="17")
+    scheduler.add_job(substract_from_dinner, "cron", hour="21")
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 
 @app.cli.command()
@@ -162,19 +169,6 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_server_error(error):
     return render_template('500.html', error=error)
-
-
-def job():
-    print("sarasa")
-    
-
-schedule.every(3).seconds.do(job)
-schedule.every().day.at("13:56").do(substract_from_breakfast)
-schedule.every().day.at("12:00").do(substract_from_lunch)
-schedule.every().day.at("17:00").do(substract_from_tea)
-schedule.every().day.at("21:00").do(substract_from_dinner)
-
-schedule.run_pending()
 
 
 if __name__ == '__main__':

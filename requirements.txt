@@ -1,4 +1,4 @@
 flask
-schedule
+apscheduler
 flask_testing
 blinker

@@ -35,14 +35,13 @@ def get_stock_substraction_list():
 
 def substract_from_breakfast():
     stock_substraction_list = get_stock_substraction_list()
-    print('breakfasted')
+    print("ando")
     with sqlite3.connect("./ayekan.db") as conn:
         cursor = conn.cursor()
         for stock in stock_substraction_list:
             if stock.breakfast > 0:
                 stock.amount -= stock.breakfast
                 cursor.execute(f'UPDATE stock SET amount = "{stock.amount}" WHERE stock_id = "{stock.stock_id}";')
-    print('breakfasted')
     
 
 def substract_from_lunch():
