@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ super() }}
+<form class="row g-3 needs-validation" method="post" action="/edited_prescription">
+    <div class="col-md-1" style="display: none;">
+        <label for="id" class="form-label">ID</label>
+        <input type="text" class="form-control" name="prescription_id" readonly value="{{ prescription.prescription_id }}">
+    </div>
+    <div class="col-md-2">
+        <label for="resident_id" class="form-label">Residente</label>
+        <input type="text" class="form-control" name="resident_id" value="{{ prescription.resident_id }}" required readonly>
+    </div>
+    <div class="col-md-2">
+        <label for="medication_id" class="form-label">Medicación</label>
+        <select class="form-select" aria-label="Default select example" name="medication_id">
+            {% for medication in medications_list %}
+                <option value="{{ medication.id }}">{{ medication.commercial_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="administration_route" class="form-label">Vía de administración</label>
+        <select class="form-select" aria-label="Default select example" name="administration_route">
+            <option {{ 'selected' if prescription.administration_route == 'Capsulas' else '' }}>Capsulas</option>
+            <option {{ 'selected' if prescription.administration_route == 'Crema' else '' }}>Crema</option>
+            <option {{ 'selected' if prescription.administration_route == 'Dosis' else '' }}>Dosis</option>
+            <option {{ 'selected' if prescription.administration_route == 'Gel' else '' }}>Gel</option>
+            <option {{ 'selected' if prescription.administration_route == 'Gotas' else '' }}>Gotas</option>
+            <option {{ 'selected' if prescription.administration_route == 'Gotas Oftal' else '' }}>Gotas Oftal</option>
+            <option {{ 'selected' if prescription.administration_route == 'Gotas Orales' else '' }}>Gotas Orales</option>
+            <option {{ 'selected' if prescription.administration_route == 'Inyectable' else '' }}>Inyectable</option>
+            <option {{ 'selected' if prescription.administration_route == 'Jarabe' else '' }}>Jarabe</option>
+            <option {{ 'selected' if prescription.administration_route == 'Loción' else '' }}>Loción</option>
+            <option {{ 'selected' if prescription.administration_route == 'Oral' else '' }}>Oral</option>
+            <option {{ 'selected' if prescription.administration_route == 'Paff' else '' }}>Paff</option>
+            <option {{ 'selected' if prescription.administration_route == 'Parche' else '' }}>Parche</option>
+            <option {{ 'selected' if prescription.administration_route == 'Polvo' else '' }}>Polvo</option>
+            <option {{ 'selected' if prescription.administration_route == 'Pomada' else '' }}>Pomada</option>
+            <option {{ 'selected' if prescription.administration_route == 'Suplemento' else '' }}>Suplemento</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <label for="breakfast" class="form-label">Desayuno</label>
+        <input type="number" step="0.5" class="form-control" name="breakfast" value="{{ prescription.breakfast }}">
+    </div>
+    <div class="col-md-1">
+        <label for="lunch" class="form-label">Almuerzo</label>
+        <input type="number" step="0.5" class="form-control" name="lunch" value="{{ prescription.lunch }}">
+    </div>
+    <div class="col-md-1">
+        <label for="tea" class="form-label">Merienda</label>
+        <input type="number" step="0.5" class="form-control" name="tea" value="{{ prescription.tea }}">
+    </div>
+    <div class="col-md-1">
+        <label for="dinner" class="form-label">Cena</label>
+        <input type="number" step="0.5" class="form-control" name="dinner" value="{{ prescription.dinner }}">
+    </div>
+    <div class="col-md-1">
+        <label for="total_per_day" class="form-label">Total por día</label>
+        <input type="number" step="0.5" class="form-control" name="total_per_day" value="{{ prescription.total_per_day }}" required readonly>
+    </div>
+    <div class="col-md-2">
+        <label for="days_left" class="form-label">Días restantes</label>
+        <input type="number" class="form-control" name="days_left" value="{{ days_left }}" readonly>
+    </div>
+    <div class="col-md-2">
+        <label for="notes" class="form-label">Notas</label>
+        <textarea class="form-control" name="notes" value="{{ prescription.notes }}" rows="3"></textarea>
+    </div>
+    <div class="col-md-2">
+        <label for="medication_status" class="form-label">Estado de medicación</label>
+        <select class="form-select" aria-label="Default select example" name="medication_status">
+            <option {{ 'selected' if prescription.medication_status == 'Activo' else '' }}>Activo</option>
+            <option {{ 'selected' if prescription.medication_status == 'Suspendido' else '' }}>Suspendido</option>
+            <option {{ 'selected' if prescription.medication_status == 'SOS' else '' }}>SOS</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="prescription_date" class="form-label">Fecha de prescripción</label>
+        <input type="date" class="form-control" name="prescription_date" value="{{ prescription.prescription_date }}" required>
+    </div>
+    <div class="col-md-2">
+        <label for="last_registry_date" class="form-label">Fecha de último inventario</label>
+        <input type="date" class="form-control" name="last_registry_date" value="{{ prescription.last_registry_date }}">
+    </div>
+    <div class="col-md-1">
+        <label for="in_pillbox" class="form-label">En pastillero</label>
+        <select class="form-select" aria-label="Default select example" name="in_pillbox">
+            <option {{ 'selected' if prescription.in_pillbox == 'SI' else '' }}>SI</option>
+            <option {{ 'selected' if prescription.in_pillbox == 'NO' else '' }}>NO</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <label for="floor" class="form-label">Piso</label>
+        <select class="form-select" aria-label="Default select example" name="floor">
+            <option {{ 'selected' if prescription.floor == 'PB' else '' }}>PB</option>
+            <option {{ 'selected' if prescription.floor == 'PA' else '' }}>PA</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="resident_status" class="form-label">Estado de residente</label>
+        <input type="text" class="form-control" name="resident_status" value="{{ resident.status }}" readonly>
+    </div>
+    <div class="col-12">
+        <a href="{{ url_for('prescriptions_list') }}" class="btn btn-primary">Volver</a>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{{ url_for('stock_list', prescription_id = prescription.prescription_id) }}" class="btn btn-primary">Ver stock</a>
+    </div>
+</form>
+{% endblock %}

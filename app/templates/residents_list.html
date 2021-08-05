@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ super() }}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Apodo</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for resident in residents_list %}
+      <tr>
+        <td>{{ resident.name }}</td>
+        <td>{{ resident.last_name }}</td>
+        <td>{{ resident.nickname }}</td>
+        <td>
+          <a href="{{ url_for('selected', id=resident.id) }}" class="btn btn-primary btn-sm">Ver</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

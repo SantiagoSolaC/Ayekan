@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ super() }}
+<form class="row g-3" method="post" action="/new_resident">
+  <div class="col-md-2">
+    <label for="status" class="form-label">Estado</label>
+    <select class="form-select" aria-label="Default select example" name="status">
+      <option selected>Seleccione uno</option>
+      <option value="0">Ingresado</option>
+      <option value="1">Baja</option>
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label for="admission_date" class="form-label">Fecha de admisión</label>
+    <input type="date" class="form-control" name="admission_date">
+  </div>
+  <div class="col-md-6"></div>
+  <div class="col-md-6">
+    <label for="name" class="form-label">Nombre</label>
+    <input type="text" class="form-control" name="name">
+  </div>
+  <div class="col-md-6">
+    <label for="last_name" class="form-label">Apellido</label>
+    <input type="text" class="form-control" name="last_name">
+  </div>
+  <div class="col-md-4">
+    <label for="birth_date" class="form-label">Fecha de nacimiento</label>
+    <input type="date" class="form-control" name="birth_date">
+  </div>
+  <div class="col-md-4">
+    <label for="age" class="form-label">Edad</label>
+    <input type="number" class="form-control" name="age">
+  </div>
+  <div class="col-md-4">
+    <label for="gender" class="form-label">Género</label>
+    <select class="form-select" aria-label="Default select example" name="gender">
+      <option selected>Seleccione uno</option>
+      <option value="0">Masculino</option>
+      <option value="1">Femenino</option>
+      <option value="2">Otro</option>
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label for="citizenship" class="form-label">Ciudadanía</label>
+    <input type="text" class="form-control" name="citizenship">
+  </div>
+  <div class="col-md-4">
+    <label for="marital_status" class="form-label">Estado civil</label>
+    <input type="text" class="form-control" name="marital_status">
+  </div>
+  <div class="col-md-6">
+    <label for="address" class="form-label">Domicilio</label>
+    <input type="text" class="form-control" name="address">
+  </div>
+  <div class="col-md-6">
+    <label for="city" class="form-label">Ciudad</label>
+    <input type="text" class="form-control" name="city">
+  </div>
+  <div class="col-md-4">
+    <label for="id_type" class="form-label">Tipo de documento</label>
+    <select class="form-select" aria-label="Default select example" name="id_type">
+      <option selected>Seleccione uno</option>
+      <option value="0">DNI</option>
+      <option value="1">LE</option>
+      <option value="2">LC</option>
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label for="id_number" class="form-label">Número de documento</label>
+    <input type="text" class="form-control" name="id_number">
+  </div>
+  <div class="col-md-6">
+    <label for="prepaid" class="form-label">Obra social</label>
+    <input type="text" class="form-control" name="prepaid">
+  </div>
+  <div class="col-md-6">
+    <label for="afiliation_number" class="form-label">Número de afiliado</label>
+    <input type="text" class="form-control" name="affiliation_number">
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Aceptar</button>
+  </div>
+</form>
+{% endblock %}

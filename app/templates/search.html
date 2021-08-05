@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ super() }}
+    <form action="/search" method="POST">
+        <div class="input-group">
+            <select class="form-select" name="select_field" aria-label="Example select with button addon">
+                <option name="status" value="status">Estado</option>
+                <option name="admission_date" value="admission_date">Fecha de admisión</option>
+                <option name="name" value="name">Nombre</option>
+                <option name="last_name" value="last_name">Apellido</option>
+                <option name="birth_date" value="birth_date">Fecha de nacimiento</option>
+                <option name="age" value="age">Edad</option>
+                <option name="gender" value="gender">Género</option>
+                <option name="citizenship" value="citizenship">Ciudadanía</option>
+                <option name="marital_status" value="marital_status">Estado civil</option>
+                <option name="address" value="address">Domicilio</option>
+                <option name="city" value="city">Ciudad</option>
+                <option name="id_type" value="id_type">Tipo de documento</option>
+                <option name="id_number" value="id_number">Número de documento</option>
+                <option name="prepaid" value="prepaid">Obra social</option>
+                <option name="affiliation_number" value="affiliation_number">Número de afiliado</option>
+                <option name="nickname" value="nickname">Apodo</option>
+            </select>
+            <input type="text" name="imput_field" class="form-control" aria-label="Text input with segmented dropdown button">
+            <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon03">Buscar</button>
+        </div>
+    </form>
+{% endblock %}

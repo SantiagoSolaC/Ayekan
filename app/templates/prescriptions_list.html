@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ super() }}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Residente</th>
+        <th scope="col">Nombre comercial</th>
+        <th scope="col">En pastillero</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prescription in prescriptions_list %}
+      <tr>
+        <td>{{ prescription.resident_id }}</td>
+        <td>{{ prescription.medication_id }}</td>
+        <td>{{ prescription.in_pillbox }}</td>
+        <td>
+            <a href="{{ url_for('selected_prescription', prescription_id = prescription.prescription_id) }}" class="btn btn-primary btn-sm">Ver</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
