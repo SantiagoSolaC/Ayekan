@@ -30,15 +30,17 @@ def test():
     unittest.TextTestRunner().run(tests)
 
 
-@app.route('/', methods = ["GET", "POST"])
-def hello():
-    return render_template("hello.html", res=None)
+@app.route('/', methods = ["GET"])
+def home():
+    return render_template("home.html")
 
 
-@app.route("/login", methods = ["POST"])
+@app.route("/login", methods = ["GET", "POST"])
 def login():
-    dictionary = {"name": request.form["_email"]}
-    return render_template("hello.html", res=dictionary)
+    if request.method == "POST":
+        pass
+    elif request.method == "GET":
+        return render_template("login.html")
 
 
 @app.route("/new_resident", methods = ["GET", "POST"])
@@ -52,6 +54,8 @@ def new_resient():
 @app.route("/residents_list", methods = ["GET"])
 def residents_list():
     residents_list = get_residents_list()
+    for resident in residents_list:
+        resident.to_show_in_html()
     return render_template('/residents_list.html', residents_list = residents_list)
 
 
@@ -129,16 +133,17 @@ def adjust_stock():
     return redirect(f"/stock_list/{prescription_id}")
 
 
-@app.route("/selected/<int:id>", methods = ["GET"])
+@app.route("/selected/<int:resident_id>", methods = ["GET"])
 def selected(resident_id):
     resident = get_resident_by_id(resident_id)
     resident.to_show_in_html()
     return render_template("/resident_details.html", resident = resident)
 
 
-@app.route("/edit_resident/<int:id>", methods = ["GET"])
+@app.route("/edit_resident/<int:resident_id>", methods = ["GET"])
 def edit_resident(resident_id):
     resident = get_resident_by_id(resident_id)
+    resident.to_show_in_html()
     return render_template("/edit_resident.html", resident = resident)
 
 

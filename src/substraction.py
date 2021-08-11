@@ -35,7 +35,6 @@ def get_stock_substraction_list():
 
 def substract_from_breakfast():
     stock_substraction_list = get_stock_substraction_list()
-    print("ando")
     with sqlite3.connect("./ayekan.db") as conn:
         cursor = conn.cursor()
         for stock in stock_substraction_list:

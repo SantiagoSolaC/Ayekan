@@ -2,26 +2,46 @@
 
 {% block content %}
   {{ super() }}
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Apodo</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for resident in residents_list %}
-      <tr>
-        <td>{{ resident.name }}</td>
-        <td>{{ resident.last_name }}</td>
-        <td>{{ resident.nickname }}</td>
-        <td>
-          <a href="{{ url_for('selected', id=resident.id) }}" class="btn btn-primary btn-sm">Ver</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="true" href="{{ url_for('search') }}">Buscar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('residents_list') }}">Lista</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Ver</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Editar</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped table-bordered" aria-describedby="datatable-buttons_info">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Apodo</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for resident in residents_list %}
+          <tr>
+            <td>{{ resident.name }}</td>
+            <td>{{ resident.last_name }}</td>
+            <td>{{ resident.nickname }}</td>
+            <td>
+              <a href="{{ url_for('selected', resident_id=resident.resident_id) }}" class="btn btn-primary btn-sm">Ver</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}

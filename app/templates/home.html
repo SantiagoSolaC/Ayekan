@@ -1,0 +1,13 @@
+{% extends "base.html"%}
+
+{% block content %}
+  {{ super() }}
+  <div class="btn-group-vertical">
+    <button type="button" class="btn btn-primary">Left</button>
+    <button type="button" class="btn btn-primary">Left</button>
+    <button type="button" class="btn btn-primary">Left</button>
+    <button type="button" class="btn btn-primary">Left</button>
+    <button type="button" class="btn btn-primary">Left</button>
+    <a href="{{ url_for('residents_list') }}" class="btn btn-primary">Residentes</a>
+  </div>
+{% endblock %}

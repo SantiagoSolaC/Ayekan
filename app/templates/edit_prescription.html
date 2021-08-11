@@ -15,7 +15,7 @@
         <label for="medication_id" class="form-label">Medicación</label>
         <select class="form-select" aria-label="Default select example" name="medication_id">
             {% for medication in medications_list %}
-                <option value="{{ medication.id }}">{{ medication.commercial_name }}</option>
+                <option value="{{ medication.medication_id }}">{{ medication.commercial_name }}</option>
             {% endfor %}
         </select>
     </div>
