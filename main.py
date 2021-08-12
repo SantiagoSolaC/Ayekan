@@ -1,6 +1,6 @@
 from flask import request, redirect, render_template
 from app import create_app
-from src.medication import get_medications_list
+from src.vademecum import get_medications_list, get_medication_by_id, edit_db_medication, create_new_medication
 from src.resident import get_residents_list, get_resident_by_id, edit_db_resident, get_resident_list_by_value
 from src.prescription import get_prescriptions_list, get_prescription_by_id, edit_db_prescription
 from src.stock import get_stock_from_value, get_stock_by_id, edit_db_stock, create_new_medication_stock
@@ -174,6 +174,44 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_server_error(error):
     return render_template('500.html', error=error)
+
+
+@app.route('/vademecum', methods = ['GET', 'POST'])
+def vademecum_list():
+    if request.method == 'GET':
+        vademecum_list = get_medications_list()
+        return render_template("/medication_list.html", vademecum_list = vademecum_list)
+    elif request.method == 'POST':
+        return redirect('/medication_new')
+
+
+@app.route('/medication_selected/<int:medication_id>', methods = ['GET'])
+def medication_selected(medication_id):
+    medication = get_medication_by_id(medication_id)
+    medication.to_show_in_html()
+    return render_template('medication_details.html', medication = medication)
+
+
+@app.route('/medication_edit/<int:medication_id>', methods = ['GET', 'POST'])
+def medication_edit(medication_id):
+    medication = get_medication_by_id(medication_id)
+    return render_template('medication_edit.html', medication = medication)
+
+
+@app.route('/medication_update', methods = ['POST'])
+def medication_update():
+    edit_db_medication(request.form)
+    return redirect('/vademecum')
+
+
+@app.route('/medication_new', methods = ['GET', 'POST'])
+def medication_new():
+    if request.method == 'POST':
+        create_new_medication(request.form)
+        return redirect('/vademecum')
+    elif request.method == 'GET':
+        return render_template('/medication_new.html')
+
 
 
 if __name__ == '__main__':

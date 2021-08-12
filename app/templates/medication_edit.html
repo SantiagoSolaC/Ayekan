@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ super() }}
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="true" href="{{ url_for('search') }}">Buscar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('residents_list') }}">Lista</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled">Ver</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active">Editar</a>
+            </li>
+          </ul>
+    </div>
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Editar Medicacion</h6>
+        <form class="row g-3 needs-validation" method="post" action="/medication_update">
+            <div class="col-md-1" style="display: none;">
+                <label for="medication_id" class="form-label">ID</label>
+                <input type="text" class="form-control" name="medication_id" readonly value="{{ medication.medication_id }}">
+            </div>
+            <div class="col-auto">
+                <label for="drug_name" class="form-label">Nombre de la droga</label>
+                <input type="text" class="form-control" name="drug_name" value="{{ medication.drug_name }}">
+            </div>
+            <div class="col-auto">
+                <label for="commercial_name" class="form-label">Nombre comercial</label>
+                <input type="text" class="form-control" name="commercial_name" value="{{ medication.commercial_name }}">
+            </div>
+            <div class="col-auto">
+                <label for="pharmaceutical_form" class="form-label">Forma farmaceutica</label>
+                <select class="form-select" aria-label="Default select example" name="pharmaceutical_form" required>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Capsulas' else '' }}>Capsulas</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Crema' else '' }}>Crema</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Dosis' else '' }}>Dosis</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gel' else '' }}>Gel</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gotas' else '' }}>Gotas</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gotas Oftalmologicas' else '' }}>Gotas Oftalmologicas</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gotas Orales' else '' }}>Gotas Orales</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Inyectable' else '' }}>Inyectable</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Jarabe' else '' }}>Jarabe</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Loción' else '' }}>Loción</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Oral' else '' }}>Oral</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Paff' else '' }}>Paff</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Parche' else '' }}>Parche</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Polvo' else '' }}>Polvo</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Pomada' else '' }}>Pomada</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Suplemento' else '' }}>Suplemento</option>
+                    <option {{ 'selected' if medication.pharmaceutical_form == 'Otro' else '' }}>Otro</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="measurement_unit" class="form-label">Unidad de medida</label>
+                <input type="text" class="form-control" name="measurement_unit" value="{{ medication.measurement_unit }}">
+            </div>
+            <div class="col-auto">
+                <label for="amount" class="form-label">Cantidad</label>
+                <input type="real" class="form-control" name="amount" value="{{ medication.amount }}">
+            </div>
+            <div class="col-auto">
+                <a href="{{ url_for('medication_selected', medication_id=medication.medication_id) }}" class="btn btn-primary">Volver</a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

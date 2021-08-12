@@ -1,7 +1,7 @@
 import sqlite3
 import time
 from src.resident import get_resident_by_id, get_resident_by_value
-from src.medication import get_medication_by_id, get_medication_by_value
+from src.vademecum import get_medication_by_id, get_medication_by_value
 
 # Crear clase 'Stock'.
 

@@ -1,5 +1,5 @@
 from src.resident import get_resident_by_id, get_resident_by_value
-from src.medication import get_medication_by_id
+from src.vademecum import get_medication_by_id
 from src.stock import get_stock_from_value, get_stock_list
 import sqlite3
 import time
