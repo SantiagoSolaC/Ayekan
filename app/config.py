@@ -1,4 +1,4 @@
 class Config:
-    ENV='developlment'
+    ENV='development'
     DEBUG='true'
     SECRET_KEY='super secreto'

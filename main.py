@@ -1,6 +1,6 @@
 from flask import request, redirect, render_template
 from app import create_app
-from src.vademecum import get_medications_list, get_medication_by_id, edit_db_medication, create_new_medication
+from src.vademecum import get_medications_list, get_medication_by_id, edit_db_medication, create_new_medication, get_medication_list_by_value, edit_db_medication
 from src.resident import get_residents_list, get_resident_by_id, edit_db_resident, get_resident_list_by_value
 from src.prescription import get_prescriptions_list, get_prescription_by_id, edit_db_prescription
 from src.stock import get_stock_from_value, get_stock_by_id, edit_db_stock, create_new_medication_stock
@@ -153,10 +153,10 @@ def edited_resident():
     return redirect("/residents_list")
 
 
-@app.route("/search", methods = ["GET", "POST"])
-def search():
+@app.route("/resident_search", methods = ["GET", "POST"])
+def resident_search():
     if request.method == "GET":
-        return render_template("/search.html")
+        return render_template("/resident_search.html")
     elif request.method == "POST":
         select_field = request.form.get("select_field")
         imput_field = request.form.get("imput_field")
@@ -176,17 +176,19 @@ def internal_server_error(error):
     return render_template('500.html', error=error)
 
 
-@app.route('/vademecum', methods = ['GET', 'POST'])
-def vademecum_list():
+@app.route('/medications_list', methods = ['GET', 'POST'])
+def medications_list():
     if request.method == 'GET':
-        vademecum_list = get_medications_list()
-        return render_template("/medication_list.html", vademecum_list = vademecum_list)
+        medications_list = get_medications_list()
+        for medication in medications_list:
+            medication.to_show_in_html()
+        return render_template("/medications_list.html", medications_list = medications_list)
     elif request.method == 'POST':
         return redirect('/medication_new')
 
 
-@app.route('/medication_selected/<int:medication_id>', methods = ['GET'])
-def medication_selected(medication_id):
+@app.route('/selected_medication/<int:medication_id>', methods = ['GET'])
+def selected_medication(medication_id):
     medication = get_medication_by_id(medication_id)
     medication.to_show_in_html()
     return render_template('medication_details.html', medication = medication)
@@ -195,23 +197,36 @@ def medication_selected(medication_id):
 @app.route('/medication_edit/<int:medication_id>', methods = ['GET', 'POST'])
 def medication_edit(medication_id):
     medication = get_medication_by_id(medication_id)
+    medication.to_show_in_html()
     return render_template('medication_edit.html', medication = medication)
 
 
 @app.route('/medication_update', methods = ['POST'])
 def medication_update():
     edit_db_medication(request.form)
-    return redirect('/vademecum')
+    return redirect('/medication_search')
 
 
 @app.route('/medication_new', methods = ['GET', 'POST'])
 def medication_new():
     if request.method == 'POST':
         create_new_medication(request.form)
-        return redirect('/vademecum')
+        return redirect('/medications_list')
     elif request.method == 'GET':
         return render_template('/medication_new.html')
 
+
+@app.route("/medication_search", methods = ["GET", "POST"])
+def medication_search():
+    if request.method == "GET":
+        return render_template("/medication_search.html")
+    elif request.method == "POST":
+        select_field = request.form.get("select_field")
+        imput_field = request.form.get("imput_field")
+        medications_list = get_medication_list_by_value(select_field, imput_field)
+        for medication in medications_list:
+            medication.to_show_in_html()
+        return render_template("/medications_list.html", medications_list = medications_list)
 
 
 if __name__ == '__main__':

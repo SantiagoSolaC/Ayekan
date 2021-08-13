@@ -6,10 +6,10 @@
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link" aria-current="true" href="{{ url_for('search') }}">Buscar</a>
+                <a class="nav-link" aria-current="true" href="{{ url_for('medication_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('residents_list') }}">Lista</a>
+                <a class="nav-link" href="{{ url_for('medications_list') }}">Lista</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active">Ver</a>
@@ -20,7 +20,7 @@
         </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Detalles Residente</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Detalles Medicación</h6>
         <form class="row g-3">
             <div class="col-md-1 d-none">
                 <label for="medication_id" class="form-label">ID</label>
@@ -47,7 +47,7 @@
                 <input type="real" class="form-control" name="amount" readonly value="{{ medication.amount }}">
             </div>
             <div class="col-12">
-                <a href="{{ url_for('vademecum_list') }}" class="btn btn-primary">Volver</a>
+                <a href="{{ url_for('medications_list') }}" class="btn btn-primary">Volver</a>
                 <a href="{{ url_for('medication_edit', medication_id=medication.medication_id) }}" class="btn btn-primary">Editar</a>
                 <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
             </div>

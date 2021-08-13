@@ -110,6 +110,5 @@ def get_medications_list():
         for medication in result:
             medication_dictionary = create_medication_dictionary(medication)
             medication = Medication(medication_dictionary)
-            medication.to_show_in_html()
             medications_list.append(medication)
         return medications_list
