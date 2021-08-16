@@ -1,4 +1,5 @@
 flask
 apscheduler
 flask_testing
+flask-navigation
 blinker

@@ -97,17 +97,17 @@ def get_prescription_by_id(prescription_id):
 # Buscar una prescripción por un campo dado. Recibe parámetro campo y valor. Devuelve lista de instancias.
 
 
-def get_prescription_by_value(field_name, value):
+def get_prescription_list_by_value(field_name, value):
     with sqlite3.connect("./ayekan.db") as conn:
         cursor = conn.cursor()
         cursor.execute(f'SELECT * FROM prescriptions WHERE {field_name} LIKE "%{value}%";')
         result = cursor.fetchall()
-        prescriptions_list = []
+        prescription_list = []
         for prescription_tuple in result:
             prescription_dictionary = create_prescription_dictionary(prescription_tuple)
             prescription = Prescription(prescription_dictionary)
-            prescriptions_list.append(prescription)
-        return prescriptions_list
+            prescription_list.append(prescription)
+        return prescription_list
 
 # Crear un nuevo registro en las tablas 'prescriptions' y 'prescriptions_registry'. Recibe un diccionario.
 
@@ -153,14 +153,14 @@ def edit_db_prescription(prescription_dictionary):
 # Listar todas las prescripciones. Devuelve lista de instancias.
 
 
-def get_prescriptions_list():
+def get_prescription_list():
     with sqlite3.connect("./ayekan.db") as conn:
         cursor = conn.cursor()
         cursor.execute(f"SELECT * FROM prescriptions;")
         result = cursor.fetchall()
-        prescriptions_list = []
+        prescription_list = []
         for prescription in result:
             prescription_dictionary = create_prescription_dictionary(prescription)
             prescription = Prescription(prescription_dictionary)
-            prescriptions_list.append(prescription)
-        return prescriptions_list
+            prescription_list.append(prescription)
+        return prescription_list

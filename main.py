@@ -1,8 +1,9 @@
-from flask import request, redirect, render_template
+from flask import request, redirect, render_template, Flask
 from app import create_app
+# from flask.ext.navigation import Navigation
 from src.vademecum import get_medications_list, get_medication_by_id, edit_db_medication, create_new_medication, get_medication_list_by_value, edit_db_medication
 from src.resident import get_residents_list, get_resident_by_id, edit_db_resident, get_resident_list_by_value
-from src.prescription import get_prescriptions_list, get_prescription_by_id, edit_db_prescription
+from src.prescription import get_prescription_list, get_prescription_by_id, edit_db_prescription, get_prescription_list_by_value
 from src.stock import get_stock_from_value, get_stock_by_id, edit_db_stock, create_new_medication_stock
 from src.substraction import substract_from_breakfast, substract_from_lunch, substract_from_tea, substract_from_dinner
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -42,6 +43,8 @@ def login():
     elif request.method == "GET":
         return render_template("login.html")
 
+# Resident stuff
+
 
 @app.route("/new_resident", methods = ["GET", "POST"])
 def new_resient():
@@ -59,12 +62,47 @@ def residents_list():
     return render_template('/residents_list.html', residents_list = residents_list)
 
 
-@app.route("/prescriptions_list", methods = ["GET"])
-def prescriptions_list():
-    prescriptions_list = get_prescriptions_list()
-    for prescription in prescriptions_list:
+@app.route("/selected/<int:resident_id>", methods = ["GET"])
+def selected(resident_id):
+    resident = get_resident_by_id(resident_id)
+    resident.to_show_in_html()
+    return render_template("/resident_details.html", resident = resident)
+
+
+@app.route("/edit_resident/<int:resident_id>", methods = ["GET"])
+def edit_resident(resident_id):
+    resident = get_resident_by_id(resident_id)
+    resident.to_show_in_html()
+    return render_template("/edit_resident.html", resident = resident)
+
+
+@app.route("/edited_resident", methods = ["POST"])
+def edited_resident():
+    edit_db_resident(request.form)
+    return redirect("/residents_list")
+
+
+@app.route("/resident_search", methods = ["GET", "POST"])
+def resident_search():
+    if request.method == "GET":
+        return render_template("/resident_search.html")
+    elif request.method == "POST":
+        select_field = request.form.get("select_field")
+        imput_field = request.form.get("imput_field")
+        residents_list = get_resident_list_by_value(select_field, imput_field)
+        for resident in residents_list:
+            resident.to_show_in_html()
+        return render_template("/residents_list.html", residents_list = residents_list)
+
+# Prescription stuff
+
+
+@app.route("/prescription_list", methods = ["GET"])
+def prescription_list():
+    prescription_list = get_prescription_list()
+    for prescription in prescription_list:
         prescription.to_show_in_html()
-    return render_template('/prescriptions_list.html', prescriptions_list = prescriptions_list)
+    return render_template('/prescription_list.html', prescription_list = prescription_list)
 
 
 @app.route("/selected_prescription/<int:prescription_id>", methods = ["GET", "POST"])
@@ -81,13 +119,28 @@ def selected_prescription(prescription_id):
         return render_template("/edit_prescription.html", prescription = prescription, days_left = days_left, medications_list = medications_list, resident = resident)
     elif request.method == "POST":
         edit_db_prescription(request.form)
-        return redirect("/prescriptions_list")
+        return redirect("/prescription_search")
     
     
 @app.route("/edited_prescription", methods = ["POST"])
 def edited_prescription():
     edit_db_prescription(request.form)
-    return redirect("/prescriptions_list")
+    return redirect("/prescription_search")
+
+
+@app.route("/prescription_search", methods = ["GET", "POST"])
+def prescription_search():
+    if request.method == "GET":
+        return render_template("/prescription_search.html")
+    elif request.method == "POST":
+        select_field = request.form.get("select_field")
+        imput_field = request.form.get("imput_field")
+        prescription_list = get_prescription_list_by_value(select_field, imput_field)
+        for prescription in prescription_list:
+            prescription.to_show_in_html()
+        return render_template("/prescription_list.html", prescription_list = prescription_list)
+
+# Stock stuff
 
 
 @app.route("/new_stock/<int:prescription_id>", methods = ["GET"])
@@ -132,48 +185,7 @@ def adjust_stock():
     edit_db_stock(request.form)
     return redirect(f"/stock_list/{prescription_id}")
 
-
-@app.route("/selected/<int:resident_id>", methods = ["GET"])
-def selected(resident_id):
-    resident = get_resident_by_id(resident_id)
-    resident.to_show_in_html()
-    return render_template("/resident_details.html", resident = resident)
-
-
-@app.route("/edit_resident/<int:resident_id>", methods = ["GET"])
-def edit_resident(resident_id):
-    resident = get_resident_by_id(resident_id)
-    resident.to_show_in_html()
-    return render_template("/edit_resident.html", resident = resident)
-
-
-@app.route("/edited_resident", methods = ["POST"])
-def edited_resident():
-    edit_db_resident(request.form)
-    return redirect("/residents_list")
-
-
-@app.route("/resident_search", methods = ["GET", "POST"])
-def resident_search():
-    if request.method == "GET":
-        return render_template("/resident_search.html")
-    elif request.method == "POST":
-        select_field = request.form.get("select_field")
-        imput_field = request.form.get("imput_field")
-        residents_list = get_resident_list_by_value(select_field, imput_field)
-        for resident in residents_list:
-            resident.to_show_in_html()
-        return render_template("/residents_list.html", residents_list = residents_list)
-
-
-@app.errorhandler(404)
-def not_found(error):
-    return render_template('404.html', error=error)
-
-
-@app.errorhandler(500)
-def internal_server_error(error):
-    return render_template('500.html', error=error)
+# Medication stuff
 
 
 @app.route('/medications_list', methods = ['GET', 'POST'])
@@ -228,6 +240,33 @@ def medication_search():
             medication.to_show_in_html()
         return render_template("/medications_list.html", medications_list = medications_list)
 
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html', error=error)
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('500.html', error=error)
+
+# Nav bar
+
+
+# nav = Navigation(app)
+
+# nav.Bar('top', [
+#     nav.Item('Home', 'index'),
+#     nav.Item('Latest News', 'news', {'page': 1}),
+# ])
+
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
+
+# @app.route('/news/<int:page>')
+# def news(page):
+#     return render_template('news.html', page=page)
 
 
 if __name__ == '__main__':
