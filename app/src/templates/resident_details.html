@@ -1,18 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ super() }}
 <div class="card">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link" aria-current="true" href="{{ url_for('resident_search') }}">Buscar</a>
+                <a class="nav-link" href="{{ url_for('views.resident_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('residents_list') }}">Lista</a>
+                <a class="nav-link" href="{{ url_for('views.resident_list') }}">Lista</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active disabled">Ver</a>
+              <a class="nav-link active disabled" href="#" aria-current="true" aria-disabled="true">Ver</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Editar</a>
@@ -20,11 +19,12 @@
         </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Detalles Residente</h6>
+        <h6 class="card-subtitle mb-2">Detalles Residente</h6>
+        <br>
         <form class="row g-3">
-            <div class="col-md-1 d-none">
+            <div class="col-md-1 d-none" aria-hidden="true">
                 <label for="ID" class="form-label">ID</label>
-                <input type="text" class="form-control" name="resident_id" readonly value="{{ resident.resident_id }}">
+                <input type="text" class="form-control" name="id" readonly value="{{ resident.id }}">
             </div>
             <div class="col-md-2">
                 <label for="status" class="form-label">Estado</label>
@@ -95,8 +95,8 @@
             <div class="col-md-2"></div>
             <div class="col-md-12"></div>
             <div class="col-12">
-                <a href="{{ url_for('resident_search') }}" class="btn btn-primary">Volver</a>
-                <a href="{{ url_for('edit_resident', resident_id=resident.resident_id) }}" class="btn btn-primary">Editar</a>
+                <a href="{{ url_for('views.resident_search') }}" class="btn btn-primary">Volver</a>
+                <a href="{{ url_for('views.resident_edition', id = resident.id) }}" class="btn btn-primary">Editar</a>
                 <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
             </div>
         </form>

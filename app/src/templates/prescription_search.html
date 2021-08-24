@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ super() }}
 <div class="card">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="true" href="{{ url_for('prescription_search') }}">Buscar</a>
+                <a class="nav-link active" href="{{ url_for('views.prescription_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('prescription_list') }}">Lista</a>
+                <a class="nav-link" href="{{ url_for('views.prescription_list') }}">Lista</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Ver</a>
@@ -26,11 +25,6 @@
                 <select class="form-select" name="select_field" aria-label="Example select with button addon">
                     <option name="resident_id" value="resident_id">Residente</option>
                     <option name="medication_id" value="medication_id">Medicación</option>
-                    <option name="administration_route" value="administration_route">Vía de administración</option>
-                    <option name="status" value="status">Estado</option>
-                    <option name="prescription_date" value="prescription_date">Fecha de prescripción</option>
-                    <option name="in_pillbox" value="in_pillbox">En pastillero</option>
-                    <option name="floor" value="floor">Piso</option>
                 </select>
                 <input type="text" name="imput_field" class="form-control" aria-label="Text input with segmented dropdown button">
                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon03">Buscar</button>

@@ -1,5 +1,5 @@
 flask
 apscheduler
-flask_testing
-flask-navigation
-blinker
+flask_nav
+flask_login
+flask_sqlalchemy

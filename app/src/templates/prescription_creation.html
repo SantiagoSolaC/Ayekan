@@ -1,30 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ super() }}
 <div class="card">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link" aria-current="true" href="{{ url_for('resident_search') }}">Buscar</a>
+                <a class="nav-link" href="{{ url_for('views.prescription_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('residents_list') }}">Lista</a>
+                <a class="nav-link" href="{{ url_for('views.prescription_list') }}">Lista</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled">Ver</a>
+              <a class="nav-link" href="#">Ver</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active">Editar</a>
+                <a class="nav-link active" tabindex="-1">Editar</a>
             </li>
           </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Editar Residente</h6>
-        <form class="row g-3 needs-validation" method="post" action="/edited_resident">
-            <div class="col-md-1" style="display: none;">
-                <label for="id" class="form-label">ID</label>
-                <input type="text" class="form-control" name="resident_id" readonly value="{{ resident.resident_id }}">
+        <h6 class="card-subtitle mb-2 text-muted">Nueva prescripción</h6>
+        <form class="row g-3 needs-validation" method="post" action="/prescription_creation">
+            <div class="col-md-2">
+                <label for="resident_id" class="form-label">Residente</label>
+                <input type="text" class="form-control" name="resident_id" value="{{ resident.id }}">
+            </div>
+            <div class="col-md-2">
+                <label for="medication_id" class="form-label">Medicación</label>
+                <input type="text" class="form-control" name="resident_id" value="{{ medication.id }}">
             </div>
             <div class="col-md-2">
                 <label for="status" class="form-label">Estado</label>

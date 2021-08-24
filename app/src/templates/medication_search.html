@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
-{% block content %}
-{{ super() }}
+{% block content %}   
 <div class="card">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="true" href="{{ url_for('medication_search') }}">Buscar</a>
+                <a class="nav-link active" href="{{ url_for('views.medication_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('medications_list') }}">Lista</a>
+                <a class="nav-link" href="{{ url_for('views.medication_list') }}">Lista</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Ver</a>
@@ -26,7 +25,6 @@
                 <select class="form-select" name="select_field" aria-label="Example select with button addon">
                     <option name="commercial_name" value="commercial_name">Nombre comercial</option>
                     <option name="drug_name" value="drug_name">Nombre de la droga</option>
-                    <option name="pharmaceutical_form" value="pharmaceutical_form">Presentación</option>
                 </select>
                 <input type="text" name="imput_field" class="form-control" aria-label="Text input with segmented dropdown button">
                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon03">Buscar</button>
