@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
-from app.src.models import Resident, resident_from_dictionary, resident_dictionary, resident_search_by_value, Medication, medication_search_by_value 
+from app.src.models import Resident, prescription_from_dictionary, resident_from_dictionary, resident_dictionary, resident_search_by_value, Medication, medication_search_by_value
 from app.src.models import Prescription, prescription_search_by_value
 from app import db
 from . import views
@@ -105,4 +105,12 @@ def prescription_list():
 @login_required
 def prescription_creation():
     if request.method == "GET":
-        return render_template("prescription_creation.html", active_item = "prescription", user = current_user)
+        medication_list = Medication.query.all()
+        medication_list
+        return render_template("prescription_creation.html", active_item = "prescription", user = current_user, medication_list = medication_list)
+    elif request.method == "POST":
+        prescription = prescription_from_dictionary(request.form)
+        print(prescription)
+        db.session.add(prescription)
+        db.session.commit()
+        return redirect(url_for('views.prescription_list'))

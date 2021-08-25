@@ -14,7 +14,7 @@
               <a class="nav-link" href="#">Ver</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" tabindex="-1">Editar</a>
+                <a class="nav-link active" tabindex="-1">Nueva prescripcion</a>
             </li>
           </ul>
     </div>
@@ -23,93 +23,77 @@
         <form class="row g-3 needs-validation" method="post" action="/prescription_creation">
             <div class="col-md-2">
                 <label for="resident_id" class="form-label">Residente</label>
-                <input type="text" class="form-control" name="resident_id" value="{{ resident.id }}">
+                <input type="text" class="form-control" name="resident_id" value="{{ resident_id }}">
             </div>
             <div class="col-md-2">
                 <label for="medication_id" class="form-label">Medicación</label>
-                <input type="text" class="form-control" name="resident_id" value="{{ medication.id }}">
-            </div>
-            <div class="col-md-2">
-                <label for="status" class="form-label">Estado</label>
-                <select class="form-select" aria-label="Default select example" name="status" required>
-                    <option {{ 'selected' if resident.status == 'Ingresado' else '' }}>Ingresado</option>
-                    <option {{ 'selected' if resident.status == 'Baja' else '' }}>Baja</option>
+                <select class="form-select" aria-label="Default select example" name="medication_id">
+                    {% for medication in medication_list %}
+                        <option value="{{ medication.id }}">{{ medication.commercial_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="col-md-2">
-                <label for="admission_date" class="form-label">Fecha de admisión</label>
-                <input type="date" class="form-control" name="admission_date" value="{{ resident.admission_date }}" required>
-            </div>
-            <div class="col-md-7"></div>
-            <div class="col-md-2">
-                <label for="nickname" class="form-label">Apodo</label>
-                <input type="text" class="form-control" name="nickname" value="{{ resident.nickname }}">
-            </div>
-            <div class="col-md-5">
-                <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" name="name" value="{{ resident.name }}" required>
-            </div>
-            <div class="col-md-5">
-                <label for="last_name" class="form-label">Apellido</label>
-                <input type="text" class="form-control" name="last_name" value="{{ resident.last_name }}" required>
-            </div>
-            <div class="col-md-2">
-                <label for="birth_date" class="form-label">Fecha de nacimiento</label>
-                <input type="date" class="form-control" name="birth_date" value="{{ resident.birth_date }}">
-            </div>
-            <div class="col-md-2">
-                <label for="age" class="form-label">Edad</label>
-                <input type="number" class="form-control" name="age" value="{{ resident.age }}">
-            </div>
-            <div class="col-md-2">
-                <label for="gender" class="form-label">Género</label>
-                <select class="form-select" aria-label="Default select example" name="gender">
-                    <option {{ 'selected' if resident.gender == 'Masculino' else '' }}>Masculino</option>
-                    <option {{ 'selected' if resident.gender == 'Femenino' else '' }}>Femenino</option>
-                    <option {{ 'selected' if resident.gender == 'Otro' else '' }}>Otro</option>
+                <label for="administration_route" class="form-label">Vía de administración</label>
+                <select class="form-select" aria-label="Default select example" name="administration_route">
+                    <option {{ 'selected' if administration_route == 'Capsulas' else '' }}>Capsulas</option>
+                    <option {{ 'selected' if administration_route == 'Crema' else '' }}>Crema</option>
+                    <option {{ 'selected' if administration_route == 'Dosis' else '' }}>Dosis</option>
+                    <option {{ 'selected' if administration_route == 'Gel' else '' }}>Gel</option>
+                    <option {{ 'selected' if administration_route == 'Gotas' else '' }}>Gotas</option>
+                    <option {{ 'selected' if administration_route == 'Gotas Oftal' else '' }}>Gotas Oftal</option>
+                    <option {{ 'selected' if administration_route == 'Gotas Orales' else '' }}>Gotas Orales</option>
+                    <option {{ 'selected' if administration_route == 'Inyectable' else '' }}>Inyectable</option>
+                    <option {{ 'selected' if administration_route == 'Jarabe' else '' }}>Jarabe</option>
+                    <option {{ 'selected' if administration_route == 'Loción' else '' }}>Loción</option>
+                    <option {{ 'selected' if administration_route == 'Oral' else '' }}>Oral</option>
+                    <option {{ 'selected' if administration_route == 'Paff' else '' }}>Paff</option>
+                    <option {{ 'selected' if administration_route == 'Parche' else '' }}>Parche</option>
+                    <option {{ 'selected' if administration_route == 'Polvo' else '' }}>Polvo</option>
+                    <option {{ 'selected' if administration_route == 'Pomada' else '' }}>Pomada</option>
+                    <option {{ 'selected' if administration_route == 'Suplemento' else '' }}>Suplemento</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <label for="citizenship" class="form-label">Ciudadanía</label>
-                <input type="text" class="form-control" name="citizenship" value="{{ resident.citizenship }}">
+            <div class="col-md-1">
+                <label for="breakfast" class="form-label">Desayuno</label>
+                <input type="number" step="0.5" class="form-control" name="breakfast" value="{{ breakfast }}">
+            </div>
+            <div class="col-md-1">
+                <label for="lunch" class="form-label">Almuerzo</label>
+                <input type="number" step="0.5" class="form-control" name="lunch" value="{{ lunch }}">
+            </div>
+            <div class="col-md-1">
+                <label for="tea" class="form-label">Merienda</label>
+                <input type="number" step="0.5" class="form-control" name="tea" value="{{ tea }}">
+            </div>
+            <div class="col-md-1">
+                <label for="dinner" class="form-label">Cena</label>
+                <input type="number" step="0.5" class="form-control" name="dinner" value="{{ dinner }}">
             </div>
             <div class="col-md-2">
-                <label for="marital_status" class="form-label">Estado civil</label>
-                <input type="text" class="form-control" name="marital_status" value="{{ resident.marital_status }}">
-            </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-6">
-                <label for="address" class="form-label">Domicilio</label>
-                <input type="text" class="form-control" name="address" value="{{ resident.address }}" required>
-            </div>
-            <div class="col-md-6">
-                <label for="city" class="form-label">Ciudad</label>
-                <input type="text" class="form-control" name="city" value="{{ resident.city }}" required>
+                <label for="notes" class="form-label">Notas</label>
+                <textarea class="form-control" name="notes" value="{{ notes }}" rows="3"></textarea>
             </div>
             <div class="col-md-2">
-                <label for="id_type" class="form-label">Tipo de documento</label>
-                <select class="form-select" aria-label="Default select example" name="id_type">
-                    <option {{ 'selected' if resident.id_type == 'DNI' else '' }}>DNI</option>
-                    <option {{ 'selected' if resident.id_type == 'LE' else '' }}>LE</option>
-                    <option {{ 'selected' if resident.id_type == 'LC' else '' }}>LC</option>
+                <label for="prescription_date" class="form-label">Fecha de prescripción</label>
+                <input type="date" class="form-control" name="prescription_date" value="{{ prescription_date }}" required>
+            </div>
+            <div class="col-md-1">
+                <label for="in_pillbox" class="form-label">En pastillero</label>
+                <select class="form-select" aria-label="Default select example" name="in_pillbox">
+                    <option {{ 'selected' if in_pillbox == 'SI' else '' }}>SI</option>
+                    <option {{ 'selected' if in_pillbox == 'NO' else '' }}>NO</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <label for="id_number" class="form-label">Número de documento</label>
-                <input type="text" class="form-control" name="id_number" value="{{ resident.id_number }}" required>
+            <div class="col-md-1">
+                <label for="floor" class="form-label">Planta a la que corresponde el residente</label>
+                <select class="form-select" aria-label="Default select example" name="floor">
+                    <option {{ 'selected' if floor == 'A' else '' }}>A</option>
+                    <option {{ 'selected' if floor == 'B' else '' }}>B</option>
+                </select>
             </div>
-            <div class="col-md-3">
-                <label for="prepaid" class="form-label">Obra social</label>
-                <input type="text" class="form-control" name="prepaid" value="{{ resident.prepaid }}">
-            </div>
-            <div class="col-md-3">
-                <label for="afiliation_number" class="form-label">Número de afiliado</label>
-                <input type="text" class="form-control" name="affiliation_number" value="{{ resident.affiliation_number }}">
-            </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-12"></div>
             <div class="col-12">
-                <a href="{{ url_for('resident_search') }}" class="btn btn-primary">Volver</a>
+                <a href="{{ url_for('views.prescription_search') }}" class="btn btn-primary">Volver</a>
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
         </form>
