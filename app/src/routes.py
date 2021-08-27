@@ -74,7 +74,7 @@ def resident_details(id):
 
 @views.route("/resident_new", methods=["GET", "POST"])
 @login_required
-def resident_creation():
+def resident_new():
     if request.method == "GET":
         return render_template(
             "resident_new.html", active_item="resident", user=current_user
@@ -88,7 +88,7 @@ def resident_creation():
 
 @views.route("/resident_details/<int:id>/edit", methods=["GET", "POST"])
 @login_required
-def resident_edition(id):
+def resident_edit(id):
     if request.method == "GET":
         resident = Resident.query.get(int(id))
         resident.to_show_in_html()
