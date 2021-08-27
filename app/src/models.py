@@ -51,6 +51,14 @@ class Resident(db.Model):
         self.prepaid = self.prepaid.lower()
 
 
+def resident_search(value):
+    resident = Resident.query.filter_by(name == value).first()
+    print(resident)
+    resident_id = resident.id
+    print(resident_id)
+    return resident_id
+
+
 def resident_search_by_value(select_field, imput_field):
     if select_field == "status":
         if imput_field != "":
@@ -123,6 +131,8 @@ class Medication(db.Model):
     pharmaceutical_form = db.Column(db.String(50), nullable=False)
     measurement_unit = db.Column(db.String(50), nullable=False)
     amount = db.Column(db.Float)
+    stocks = db.relationship("Stock", backref="medication")
+    prescriptions = db.relationship("Prescription", secondary=medication_prescription)
 
     def to_show_in_html(self):
         self.drug_name.title()
@@ -171,36 +181,32 @@ class Stock(db.Model):
 class Prescription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable=False)
+    # medication_id = db.Column(db.Integer, db.ForeignKey('medication.id'), nullable = False)
+    medications = db.relationship("Medication", secondary=medication_prescription)
     administration_route = db.Column(db.String(100), nullable=False)
     breakfast = db.Column(db.Integer)
     lunch = db.Column(db.Integer)
     tea = db.Column(db.Integer)
     dinner = db.Column(db.Integer)
-    total_per_day = db.Column(db.Integer)
     notes = db.Column(db.String(200))
-    medication_status = db.Column(db.String(100), nullable=False)
-    prescription_date = db.Column(db.Date, nullable=False)
-    last_registry_date = db.Column(db.Date)
+    medication_status = db.Column(db.String(100))
+    prescription_date = db.Column(db.String(20), nullable=False)
+    last_registry_date = db.Column(db.String(20))
     in_pillbox = db.Column(db.String(50), nullable=False)
     floor = db.Column(db.String(50), nullable=False)
 
     stocks = db.relationship("Stock", backref="prescription")
-    medications = db.relationship("Medication", secondary=medication_prescription)
 
     def to_show_in_html(self):
         self.resident_id = self.resident_id.nickname.upper()
         self.medication_id = self.medication_id.commercial_name.title()
         self.administration_route.title()
-        self.total_per_day = self.breakfast + self.lunch + self.tea + self.dinner
         self.medication_status.title()
         self.in_pillbox.upper()
         self.floor.upper()
 
     def to_store_in_db(self):
-        self.resident_id = self.resident_id.id
-        self.medication_id = self.medication_id.id
         self.administration_route.lower()
-        self.medication_status.lower()
         self.in_pillbox.lower()
         self.floor.lower()
 
@@ -208,8 +214,9 @@ class Prescription(db.Model):
 def prescription_search_by_value(select_field, imput_field):
     if select_field == "resident_id":
         if imput_field != "":
+            resident_id = resident_search(imput_field)
             prescription_list = Prescription.query.filter(
-                Prescription.resident_id.like(imput_field)
+                Prescription.resident_id.like(resident_id)
             ).all()
             return prescription_list
         else:
@@ -220,3 +227,23 @@ def prescription_search_by_value(select_field, imput_field):
             Prescription.medication_id.like(imput_field)
         ).all()
         return prescription_list
+
+
+def prescription_from_dictionary(prescription_dictionary):
+    new_prescription = Prescription(
+        resident_id=prescription_dictionary.get("resident_id"),
+        # medications = prescription_dictionary.get("medication_id"),
+        administration_route=prescription_dictionary.get("administration_route"),
+        breakfast=prescription_dictionary.get("breakfast"),
+        lunch=prescription_dictionary.get("lunch"),
+        tea=prescription_dictionary.get("tea"),
+        dinner=prescription_dictionary.get("dinner"),
+        notes=prescription_dictionary.get("notes"),
+        medication_status=prescription_dictionary.get("medication_status"),
+        prescription_date=prescription_dictionary.get("prescription_date"),
+        last_registry_date=prescription_dictionary.get("last_registry_date"),
+        in_pillbox=prescription_dictionary.get("in_pillbox"),
+        floor=prescription_dictionary.get("floor"),
+    )
+    # new_prescription.to_store_in_db()
+    return new_prescription

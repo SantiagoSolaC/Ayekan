@@ -176,6 +176,17 @@ def prescription_list():
 @login_required
 def prescription_creation():
     if request.method == "GET":
+        medication_list = Medication.query.all()
+        medication_list
         return render_template(
-            "prescription_creation.html", active_item="prescription", user=current_user
+            "prescription_creation.html",
+            active_item="prescription",
+            user=current_user,
+            medication_list=medication_list,
         )
+    elif request.method == "POST":
+        prescription = prescription_from_dictionary(request.form)
+        print(prescription)
+        db.session.add(prescription)
+        db.session.commit()
+        return redirect(url_for("views.prescription_list"))
