@@ -1,3 +1,4 @@
+from threading import currentThread
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from app.src.models import (
@@ -7,6 +8,8 @@ from app.src.models import (
     resident_search_by_value,
     Medication,
     medication_search_by_value,
+    medication_instance_from_dictionary,
+    medication_update_from_dictionary,
 )
 from app.src.models import Prescription, prescription_search_by_value
 from app import db
@@ -69,12 +72,12 @@ def resident_details(id):
     )
 
 
-@views.route("/resident_creation", methods=["GET", "POST"])
+@views.route("/resident_new", methods=["GET", "POST"])
 @login_required
 def resident_creation():
     if request.method == "GET":
         return render_template(
-            "resident_creation.html", active_item="resident", user=current_user
+            "resident_new.html", active_item="resident", user=current_user
         )
     elif request.method == "POST":
         resident = resident_instance_from_dictionary(request.form)
@@ -90,7 +93,7 @@ def resident_edition(id):
         resident = Resident.query.get(int(id))
         resident.to_show_in_html()
         return render_template(
-            "resident_edition.html",
+            "resident_edit.html",
             resident=resident,
             active_item="resident",
             user=current_user,
@@ -135,6 +138,47 @@ def medication_list():
         user=current_user,
     )
 
+@views.route("/medication_new", methods = ["GET", "POST"])
+@login_required
+def medication_new():
+    if request.method == "GET":
+        return render_template(
+            "medication_new.html", active_item="medication", user=current_user
+        )
+    elif request.method == "POST":
+        medication = medication_instance_from_dictionary(request.form)
+        db.session.add(medication)
+        db.session.commit()
+        return redirect(url_for("views.medication_search"))
+
+@views.route("/medication_details/<int:id>", methods = ["GET"])
+@login_required
+def medication_details(id):
+    medication = Medication.query.get(int(id))
+    medication.to_show_in_html()
+    return render_template(
+        "medication_details.html",
+        medication = medication,
+        active_item = "medication",
+        user = current_user,
+    )
+
+@views.route("/medication_edit/<int:id>/edit", methods = ["GET", "POST"])
+@login_required
+def medication_edit(id):
+    if request.method == "GET":
+        medication = Medication.query.get(int(id))
+        medication.to_show_in_html()
+        return render_template(
+            "medication_edit.html",
+            medication = medication,
+            active_item = "medication",
+            user = current_user,
+        )
+    elif request.method == "POST":
+        medication_update_from_dictionary(request.form)
+        return redirect(url_for("views.medication_search"))
+    
 
 # Prescription stuff
 
@@ -172,14 +216,14 @@ def prescription_list():
     )
 
 
-@views.route("/prescription_creation", methods=["GET", "POST"])
+@views.route("/prescription_new", methods=["GET", "POST"])
 @login_required
 def prescription_creation():
     if request.method == "GET":
         medication_list = Medication.query.all()
         medication_list
         return render_template(
-            "prescription_creation.html",
+            "prescription_new.html",
             active_item="prescription",
             user=current_user,
             medication_list=medication_list,

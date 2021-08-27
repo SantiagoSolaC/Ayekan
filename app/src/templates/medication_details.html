@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="true" href="{{ url_for('views.medication_search') }}">Buscar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('views.medication_list') }}">Lista</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active">Ver</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Editar</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Detalles Medicación</h6>
+        <form class="row g-3">
+            <div class="col-md-1 d-none">
+                <label for="medication_id" class="form-label">ID</label>
+                <input type="text" class="form-control" name="medication_id" readonly value="{{ medication.id }}">
+            </div>
+            <div class="col-auto">
+                <label for="drug_name" class="form-label">Nombre de la droga</label>
+                <input type="text" class="form-control" name="drug_name" readonly value="{{ medication.drug_name }}">
+            </div>
+            <div class="col-auto">
+                <label for="commercial_name" class="form-label">Nombre comercial</label>
+                <input type="text" class="form-control" name="commercial_name" readonly value="{{ medication.commercial_name }}">
+            </div>
+            <div class="col-auto">
+                <label for="pharmaceutical_form" class="form-label">Forma farmaceutica</label>
+                <input type="text" class="form-control" name="pharmaceutical_form" readonly value="{{ medication.pharmaceutical_form }}">
+            </div>
+            <div class="col-auto">
+                <label for="measurement_unit" class="form-label">Unidad de medida</label>
+                <input type="text" class="form-control" name="measurement_unit" readonly value="{{ medication.measurement_unit }}">
+            </div>
+            <div class="col-auto">
+                <label for="amount" class="form-label">Cantidad</label>
+                <input type="real" class="form-control" name="amount" readonly value="{{ medication.amount }}">
+            </div>
+            <div class="col-12">
+                <a href="{{ url_for('views.medication_list') }}" class="btn btn-primary">Volver</a>
+                <a href="{{ url_for('views.medication_edit', id = medication.id ) }}" class="btn btn-primary">Editar</a>
+                <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

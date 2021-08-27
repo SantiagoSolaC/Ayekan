@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a class="btn btn-primary" href="#">Nueva medicación</a>
+<a class="btn btn-primary" href="{{ url_for('views.medication_new') }}">Nueva medicación</a>
 <hr>
 <div class="card">
     <div class="card-header">
@@ -37,7 +37,7 @@
                     <td>{{ medication.drug_name }}</td>
                     <td>{{ medication.pharmaceutical_form }}</td>
                     <td>
-                        <a href="#" class="btn btn-primary btn-sm">Ver</a>
+                        <a href="{{ url_for('views.medication_details', id = medication.id) }}" class="btn btn-primary btn-sm">Ver</a>
                     </td>
                 </tr>
                 {% endfor %}

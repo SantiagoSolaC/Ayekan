@@ -2,6 +2,8 @@ from app import db
 from datetime import datetime
 
 
+# Resident table creation with his functions..
+
 class Resident(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(50), nullable=False)
@@ -110,6 +112,8 @@ def resident_update_from_dictionary(request_form):
     db.session.commit()
 
 
+# medication_presciption table creation (relationship betwen medication and prescription tables)..
+
 medication_prescription = db.Table(
     "medication_prescription",
     db.Column(
@@ -124,6 +128,8 @@ medication_prescription = db.Table(
 )
 
 
+# Medication table creation with his functions..
+
 class Medication(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     drug_name = db.Column(db.String(100), nullable=False)
@@ -132,7 +138,7 @@ class Medication(db.Model):
     measurement_unit = db.Column(db.String(50), nullable=False)
     amount = db.Column(db.Float)
     stocks = db.relationship("Stock", backref="medication")
-    prescriptions = db.relationship("Prescription", secondary=medication_prescription)
+    # prescriptions = db.relationship("Prescription", secondary=medication_prescription)
 
     def to_show_in_html(self):
         self.drug_name.title()
@@ -145,6 +151,18 @@ class Medication(db.Model):
         self.pharmaceutical_form.lower()
 
     stocks = db.relationship("Stock", backref="medication")
+
+
+def medication_instance_from_dictionary(medication_dictionary):
+    new_medication = Medication(
+        drug_name = medication_dictionary.get("drug_name"),
+        commercial_name = medication_dictionary.get("commercial_name"),
+        pharmaceutical_form = medication_dictionary.get("pharmaceutical_form"),
+        measurement_unit = medication_dictionary.get("measurement_unit"),
+        amount = medication_dictionary.get("amount")
+    )
+    new_medication.to_store_in_db()
+    return new_medication
 
 
 def medication_search_by_value(select_field, imput_field):
@@ -164,6 +182,13 @@ def medication_search_by_value(select_field, imput_field):
         return medication_list
 
 
+def medication_update_from_dictionary(request_form):
+    db.session.query(Medication).filter_by(id=request_form.get("id")).update(request_form)
+    db.session.commit()
+
+
+# Stock table creation..
+
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable=False)
@@ -177,6 +202,8 @@ class Stock(db.Model):
     notes = db.Column(db.String(200))
     date = db.Column(db.Date, nullable=False)
 
+
+# Prescription table creation with gist functions..
 
 class Prescription(db.Model):
     id = db.Column(db.Integer, primary_key=True)

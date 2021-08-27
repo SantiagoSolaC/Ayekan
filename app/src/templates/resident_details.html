@@ -96,7 +96,7 @@
             <div class="col-md-12"></div>
             <div class="col-12">
                 <a href="{{ url_for('views.resident_search') }}" class="btn btn-primary">Volver</a>
-                <a href="{{ url_for('views.resident_edition', id = resident.id) }}" class="btn btn-primary">Editar</a>
+                <a href="{{ url_for('views.resident_edit', id = resident.id) }}" class="btn btn-primary">Editar</a>
                 <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
             </div>
         </form>
