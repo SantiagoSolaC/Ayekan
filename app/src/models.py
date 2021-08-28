@@ -54,7 +54,8 @@ class Resident(db.Model):
 
 
 def resident_search(value):
-    resident = Resident.query.filter_by(name == value).first()
+    print (value)
+    resident = Resident.query.filter(Resident.name == value).first()
     print(resident)
     resident_id = resident.id
     print(resident_id)
@@ -241,7 +242,7 @@ class Prescription(db.Model):
 def prescription_search_by_value(select_field, imput_field):
     if select_field == "resident_id":
         if imput_field != "":
-            resident_id = resident_search(imput_field)
+            resident_id = resident_search_by_value(select_field, imput_field)
             prescription_list = Prescription.query.filter(
                 Prescription.resident_id.like(resident_id)
             ).all()

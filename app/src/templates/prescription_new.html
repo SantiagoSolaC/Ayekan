@@ -8,7 +8,7 @@
                 <a class="nav-link" href="{{ url_for('views.prescription_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('views.prescription_list') }}">Lista</a>
+                <a class="nav-link" href="#">Lista</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Ver</a>
@@ -20,11 +20,11 @@
     </div>
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">Nueva prescripción</h6>
-        <form class="row g-3 needs-validation" method="post" action="/prescription_creation">
-            <div class="col-md-2">
+        <form class="row g-3 needs-validation" method="post" action="/prescription_new">
+            <!-- <div class="col-md-2">
                 <label for="resident_id" class="form-label">Residente</label>
                 <input type="text" class="form-control" name="resident_id" value="{{ resident_id }}">
-            </div>
+            </div> -->
             <div class="col-md-2">
                 <label for="medication_id" class="form-label">Medicación</label>
                 <select class="form-select" aria-label="Default select example" name="medication_id">

@@ -8,7 +8,7 @@
                 <a class="nav-link active" href="{{ url_for('views.prescription_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('views.prescription_list') }}">Lista</a>
+                <a class="nav-link" href="#">Lista</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Ver</a>
@@ -23,8 +23,8 @@
         <form action="/prescription_search" method="POST">
             <div class="input-group">
                 <select class="form-select" name="select_field" aria-label="Example select with button addon">
-                    <option name="resident_id" value="resident_id">Residente</option>
-                    <option name="medication_id" value="medication_id">Medicación</option>
+                    <option name="resident_name" value="resident_name">Residente</option>
+                    <option name="medication_name" value="medication_name">Medicación</option>
                 </select>
                 <input type="text" name="imput_field" class="form-control" aria-label="Text input with segmented dropdown button">
                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon03">Buscar</button>
