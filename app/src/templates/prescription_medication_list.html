@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a class="btn btn-primary" href="{{ url_for('views.medication_new') }}">Nueva medicación</a>
-<hr>
 <div class="card">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link" aria-current="true" href="{{ url_for('views.medication_search') }}">Buscar</a>
+                <a class="nav-link" aria-current="true" href="{{ url_for('views.prescription_search') }}">Buscar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="{{ url_for('views.medication_list') }}">Lista</a>
+                <a class="nav-link active" href="#">Lista</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Ver</a>
@@ -37,7 +35,7 @@
                     <td>{{ medication.drug_name }}</td>
                     <td>{{ medication.pharmaceutical_form }}</td>
                     <td>
-                        <a href="{{ url_for('views.medication_details', id = medication.id) }}"
+                        <a href="{{ url_for('views.prescription_list/from_medication/', medication_id = medication.id) }}"
                             class="btn btn-primary btn-sm">Ver</a>
                     </td>
                 </tr>

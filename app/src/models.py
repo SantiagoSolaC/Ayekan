@@ -54,7 +54,7 @@ class Resident(db.Model):
 
 
 def resident_search(value):
-    print (value)
+    print(value)
     resident = Resident.query.filter(Resident.name == value).first()
     print(resident)
     resident_id = resident.id
@@ -73,11 +73,19 @@ def resident_search_by_value(select_field, imput_field):
             resident_list = Resident.query.all()
             return resident_list
     elif select_field == "nickname":
-        resident_list = Resident.query.filter(Resident.nickname.like(imput_field)).all()
+        resident_list = Resident.query.filter(
+            Resident.nickname.like(imput_field)).all()
         return resident_list
     elif select_field == "name":
-        resident_list = Resident.query.filter(Resident.name.like(imput_field)).all()
-        return resident_list
+        if imput_field != "":
+            resident_list = Resident.query.filter(
+                Resident.status.like(imput_field)
+            ).all()
+            return resident_list
+        else:
+            resident_list = Resident.query.filter(
+                Resident.name.like(imput_field)).all()
+            return resident_list
     elif select_field == "last_name":
         resident_list = Resident.query.filter(
             Resident.last_name.like(imput_field)
@@ -109,7 +117,8 @@ def resident_instance_from_dictionary(resident_dictionary):
 
 
 def resident_update_from_dictionary(request_form):
-    db.session.query(Resident).filter_by(id=request_form.get("id")).update(request_form)
+    db.session.query(Resident).filter_by(
+        id=request_form.get("id")).update(request_form)
     db.session.commit()
 
 
@@ -156,11 +165,11 @@ class Medication(db.Model):
 
 def medication_instance_from_dictionary(medication_dictionary):
     new_medication = Medication(
-        drug_name = medication_dictionary.get("drug_name"),
-        commercial_name = medication_dictionary.get("commercial_name"),
-        pharmaceutical_form = medication_dictionary.get("pharmaceutical_form"),
-        measurement_unit = medication_dictionary.get("measurement_unit"),
-        amount = medication_dictionary.get("amount")
+        drug_name=medication_dictionary.get("drug_name"),
+        commercial_name=medication_dictionary.get("commercial_name"),
+        pharmaceutical_form=medication_dictionary.get("pharmaceutical_form"),
+        measurement_unit=medication_dictionary.get("measurement_unit"),
+        amount=medication_dictionary.get("amount")
     )
     new_medication.to_store_in_db()
     return new_medication
@@ -184,7 +193,8 @@ def medication_search_by_value(select_field, imput_field):
 
 
 def medication_update_from_dictionary(request_form):
-    db.session.query(Medication).filter_by(id=request_form.get("id")).update(request_form)
+    db.session.query(Medication).filter_by(
+        id=request_form.get("id")).update(request_form)
     db.session.commit()
 
 
@@ -192,7 +202,8 @@ def medication_update_from_dictionary(request_form):
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable=False)
+    resident_id = db.Column(db.Integer, db.ForeignKey(
+        "resident.id"), nullable=False)
     medication_id = db.Column(
         db.Integer, db.ForeignKey("medication.id"), nullable=False
     )
@@ -208,9 +219,11 @@ class Stock(db.Model):
 
 class Prescription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable=False)
+    resident_id = db.Column(db.Integer, db.ForeignKey(
+        "resident.id"), nullable=False)
     # medication_id = db.Column(db.Integer, db.ForeignKey('medication.id'), nullable = False)
-    medications = db.relationship("Medication", secondary=medication_prescription)
+    medications = db.relationship(
+        "Medication", secondary=medication_prescription)
     administration_route = db.Column(db.String(100), nullable=False)
     breakfast = db.Column(db.Integer)
     lunch = db.Column(db.Integer)
@@ -261,7 +274,8 @@ def prescription_from_dictionary(prescription_dictionary):
     new_prescription = Prescription(
         resident_id=prescription_dictionary.get("resident_id"),
         # medications = prescription_dictionary.get("medication_id"),
-        administration_route=prescription_dictionary.get("administration_route"),
+        administration_route=prescription_dictionary.get(
+            "administration_route"),
         breakfast=prescription_dictionary.get("breakfast"),
         lunch=prescription_dictionary.get("lunch"),
         tea=prescription_dictionary.get("tea"),
