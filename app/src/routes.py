@@ -11,8 +11,8 @@ from app.src.models import (
     medication_instance_from_dictionary,
     medication_update_from_dictionary,
     Prescription,
-    prescription_search_by_value,
-    prescription_from_dictionary
+    prescription_from_dictionary,
+    medication_prescription
 )
 from app import db
 from . import views
@@ -26,12 +26,16 @@ def home():
 # Resident stuff
 
 
+resident_context = {"active_item": "resident",
+                    "user": current_user}
+
+
 @views.route("/resident_search", methods=["GET", "POST"])
 @login_required
 def resident_search():
     if request.method == "GET":
         return render_template(
-            "resident_search.html", active_item="resident", user=current_user
+            "resident_search.html", **resident_context
         )
     elif request.method == "POST":
         resident_list = resident_search_by_value(
@@ -42,8 +46,7 @@ def resident_search():
         return render_template(
             "resident_list.html",
             resident_list=resident_list,
-            active_item="resident",
-            user=current_user,
+            **resident_context
         )
 
 
@@ -56,8 +59,7 @@ def resident_list():
     return render_template(
         "resident_list.html",
         resident_list=resident_list,
-        active_item="resident",
-        user=current_user,
+        **resident_context
     )
 
 
@@ -69,8 +71,7 @@ def resident_details(id):
     return render_template(
         "resident_details.html",
         resident=resident,
-        active_item="resident",
-        user=current_user,
+        **resident_context
     )
 
 
@@ -79,7 +80,7 @@ def resident_details(id):
 def resident_new():
     if request.method == "GET":
         return render_template(
-            "resident_new.html", active_item="resident", user=current_user
+            "resident_new.html", **resident_context
         )
     elif request.method == "POST":
         resident = resident_instance_from_dictionary(request.form)
@@ -97,8 +98,7 @@ def resident_edit(id):
         return render_template(
             "resident_edit.html",
             resident=resident,
-            active_item="resident",
-            user=current_user,
+            **resident_context
         )
     elif request.method == "POST":
         resident_update_from_dictionary(request.form)
@@ -108,12 +108,16 @@ def resident_edit(id):
 # Medication stuff
 
 
+medication_context = {"active_item": "medication",
+                      "user": current_user}
+
+
 @views.route("/medication_search", methods=["GET", "POST"])
 @login_required
 def medication_search():
     if request.method == "GET":
         return render_template(
-            "medication_search.html", active_item="medication", user=current_user
+            "medication_search.html", **medication_context
         )
     elif request.method == "POST":
         medication_list = medication_search_by_value(
@@ -124,8 +128,7 @@ def medication_search():
         return render_template(
             "medication_list.html",
             medication_list=medication_list,
-            active_item="medication",
-            user=current_user,
+            **medication_context
         )
 
 
@@ -136,8 +139,7 @@ def medication_list():
     return render_template(
         "medication_list.html",
         medication_list=medication_list,
-        active_item="medication",
-        user=current_user,
+        **medication_context
     )
 
 
@@ -146,7 +148,7 @@ def medication_list():
 def medication_new():
     if request.method == "GET":
         return render_template(
-            "medication_new.html", active_item="medication", user=current_user
+            "medication_new.html", **medication_context
         )
     elif request.method == "POST":
         medication = medication_instance_from_dictionary(request.form)
@@ -163,8 +165,7 @@ def medication_details(id):
     return render_template(
         "medication_details.html",
         medication=medication,
-        active_item="medication",
-        user=current_user,
+        **medication_context
     )
 
 
@@ -177,8 +178,7 @@ def medication_edit(id):
         return render_template(
             "medication_edit.html",
             medication=medication,
-            active_item="medication",
-            user=current_user,
+            **medication_context
         )
     elif request.method == "POST":
         medication_update_from_dictionary(request.form)
@@ -204,7 +204,7 @@ def prescription_search():
             resident_list = resident_search_by_value(
                 "name", request.form.get("imput_field")
             )
-            return render_template("/prescription_resident_list.html",
+            return render_template("/prescription_list_from_resident.html",
                                    resident_list=resident_list,
                                    **prescription_context
                                    )
@@ -212,21 +212,29 @@ def prescription_search():
             medication_list = medication_search_by_value(
                 "commercial_name", request.form.get("imput_field")
             )
-            return render_template("prescription_medication_list.html",
+            return render_template("prescription_list_from_medication.html",
                                    medication_list=medication_list,
                                    **prescription_context
                                    )
 
 
-@views.route("/prescription_list/<int:resident_id>", methods=["GET"])
+@views.route("/prescription_list", methods=["GET"])
 @login_required
-def prescription_list(resident_id):
-    prescription_list = Prescription.query.filter(
-        Prescription.resident_id == resident_id).all()
+def prescription_list():
+    prescription_list = Prescription.query.all()
+    return render_template("prescription_list.html", prescription_list=prescription_list, **prescription_context)
+
+
+@views.route("/prescription_list/from_resident/<int:resident_id>", methods=["GET"])
+@login_required
+def prescription_list_from_resident(resident_id):
+    resident = Resident.query.get(resident_id)
+    prescription_list = resident.prescriptions
+    # prescription_list = Resident.query.filter(
+    #     Prescription.resident_id == resident_id).all()
     return render_template(
         "prescription_list.html",
         prescription_list=prescription_list,
-        # resident_id=resident_id,
         **prescription_context
     )
 
@@ -234,12 +242,11 @@ def prescription_list(resident_id):
 @views.route("/prescription_list/from_medication/<int:medication_id>", methods=["GET"])
 @login_required
 def prescription_list_from_medication(medication_id):
-    prescription_list = Prescription.query.filter(
-        Prescription.medications == medication_id).all()
+    prescription_list = db.session.query(Prescription).join(
+        medication_prescription).join(Medication).filter(Medication.id == medication_id).all()
     return render_template(
         "prescription_list.html",
         prescription_list=prescription_list,
-        # resident_id=resident_id,
         **prescription_context
     )
 

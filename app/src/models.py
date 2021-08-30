@@ -1,8 +1,8 @@
 from app import db
-from datetime import datetime
 
 
-# Resident table creation with his functions..
+# Resident table creation with its functions.
+
 
 class Resident(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,11 +54,8 @@ class Resident(db.Model):
 
 
 def resident_search(value):
-    print(value)
     resident = Resident.query.filter(Resident.name == value).first()
-    print(resident)
     resident_id = resident.id
-    print(resident_id)
     return resident_id
 
 
@@ -79,12 +76,11 @@ def resident_search_by_value(select_field, imput_field):
     elif select_field == "name":
         if imput_field != "":
             resident_list = Resident.query.filter(
-                Resident.status.like(imput_field)
+                Resident.name.like(imput_field)
             ).all()
             return resident_list
         else:
-            resident_list = Resident.query.filter(
-                Resident.name.like(imput_field)).all()
+            resident_list = Resident.query.all()
             return resident_list
     elif select_field == "last_name":
         resident_list = Resident.query.filter(
@@ -122,7 +118,8 @@ def resident_update_from_dictionary(request_form):
     db.session.commit()
 
 
-# medication_presciption table creation (relationship betwen medication and prescription tables)..
+# medication_presciption table creation (relationship between medication and prescription tables).
+
 
 medication_prescription = db.Table(
     "medication_prescription",
@@ -138,7 +135,8 @@ medication_prescription = db.Table(
 )
 
 
-# Medication table creation with his functions..
+# Medication table creation with its functions.
+
 
 class Medication(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -148,7 +146,8 @@ class Medication(db.Model):
     measurement_unit = db.Column(db.String(50), nullable=False)
     amount = db.Column(db.Float)
     stocks = db.relationship("Stock", backref="medication")
-    # prescriptions = db.relationship("Prescription", secondary=medication_prescription)
+    # prescriptions = db.relationship(
+    #     "Prescription", secondary=medication_prescription)
 
     def to_show_in_html(self):
         self.drug_name.title()
@@ -198,7 +197,8 @@ def medication_update_from_dictionary(request_form):
     db.session.commit()
 
 
-# Stock table creation..
+# Stock table creation.
+
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -215,7 +215,8 @@ class Stock(db.Model):
     date = db.Column(db.Date, nullable=False)
 
 
-# Prescription table creation with gist functions..
+# Prescription table creation with its functions.
+
 
 class Prescription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -253,17 +254,19 @@ class Prescription(db.Model):
 
 
 def prescription_search_by_value(select_field, imput_field):
-    if select_field == "resident_id":
+    prescription_list = []
+    if select_field == "resident_name":
         if imput_field != "":
-            resident_id = resident_search_by_value(select_field, imput_field)
-            prescription_list = Prescription.query.filter(
-                Prescription.resident_id.like(resident_id)
-            ).all()
+            resident_list = resident_search_by_value(select_field, imput_field)
+            for resident in resident_list:
+                prescription_list_by_resident = Prescription.query.filter(
+                    Prescription.resident_id.like(resident.id)).all()
+                prescription_list.append(prescription_list_by_resident)
             return prescription_list
         else:
             prescription_list = Prescription.query.all()
             return prescription_list
-    elif select_field == "medication_id":
+    elif select_field == "medication_name":
         prescription_list = Prescription.query.filter(
             Prescription.medication_id.like(imput_field)
         ).all()

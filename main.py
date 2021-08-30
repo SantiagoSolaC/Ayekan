@@ -1,9 +1,9 @@
 from flask import render_template
 from app import create_app
-# from flask.ext.navigation import Navigation
 # from app.src.substraction import substract_from_breakfast, substract_from_lunch, substract_from_tea, substract_from_dinner
 from apscheduler.schedulers.background import BackgroundScheduler
-import unittest, atexit
+import unittest
+import atexit
 
 
 app = create_app()
