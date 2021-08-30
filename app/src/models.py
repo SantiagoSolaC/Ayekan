@@ -124,13 +124,16 @@ def resident_update_from_dictionary(request_form):
 medication_prescription = db.Table(
     "medication_prescription",
     db.Column(
-        "medication_id", db.Integer, db.ForeignKey("medication.id"), primary_key=True
+        "medication_id", 
+        db.Integer, 
+        db.ForeignKey("medication.id"), 
+        primary_key=True
     ),
     db.Column(
         "prescription_id",
         db.Integer,
         db.ForeignKey("prescription.id"),
-        primary_key=True,
+        primary_key=True
     ),
 )
 
@@ -292,3 +295,9 @@ def prescription_from_dictionary(prescription_dictionary):
     )
     # new_prescription.to_store_in_db()
     return new_prescription
+
+
+def prescription_update_from_dictionary(request_form):
+    db.session.query(Prescription).filter_by(
+        id=request_form.get("id")).update(request_form)
+    db.session.commit()
