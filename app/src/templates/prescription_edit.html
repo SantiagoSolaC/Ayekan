@@ -27,7 +27,7 @@
                 <input type="text" class="form-control" name="id" readonly value="{{ prescription.id }}">
             </div>
             <div class="col-auto">
-                <label for="resident_id" class="form-label">Residente:</label>
+                <label for="resident_id" class="form-label">Residente</label>
                 <input type="text" class="form-control" name="resident_id" value="{{ prescription.resident.id }}" required readonly hidden>
                 <input type="text" class="form-control" value="{{ prescription.resident.nickname }}, {{ prescription.resident.name }} {{ prescription.resident.last_name }}" required readonly>
             </div>
