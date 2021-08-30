@@ -12,6 +12,8 @@ from app.src.models import (
     medication_update_from_dictionary,
     Prescription,
     prescription_from_dictionary,
+    prescription_search_by_value,
+    prescription_update_from_dictionary,
     medication_prescription
 )
 from app import db
@@ -162,8 +164,7 @@ def medication_new():
 def medication_details(id):
     medication = Medication.query.get(int(id))
     medication.to_show_in_html()
-    return render_template(
-        "medication_details.html",
+    return render_template("medication_details.html",
         medication=medication,
         **medication_context
     )
@@ -218,13 +219,6 @@ def prescription_search():
                                    )
 
 
-@views.route("/prescription_list", methods=["GET"])
-@login_required
-def prescription_list():
-    prescription_list = Prescription.query.all()
-    return render_template("prescription_list.html", prescription_list=prescription_list, **prescription_context)
-
-
 @views.route("/prescription_list/from_resident/<int:resident_id>", methods=["GET"])
 @login_required
 def prescription_list_from_resident(resident_id):
@@ -232,8 +226,7 @@ def prescription_list_from_resident(resident_id):
     prescription_list = resident.prescriptions
     # prescription_list = Resident.query.filter(
     #     Prescription.resident_id == resident_id).all()
-    return render_template(
-        "prescription_list.html",
+    return render_template("prescription_list.html",
         prescription_list=prescription_list,
         **prescription_context
     )
@@ -249,6 +242,39 @@ def prescription_list_from_medication(medication_id):
         prescription_list=prescription_list,
         **prescription_context
     )
+
+
+@views.route("/prescription_list", methods=["GET"])
+@login_required
+def prescription_list():
+    prescription_list = Prescription.query.all()
+    return render_template("prescription_list.html", prescription_list=prescription_list, **prescription_context)
+
+
+@views.route("/prescription_details/<int:prescription_id>", methods = ["GET", "POST"])
+@login_required
+def prescription_details(prescription_id):
+    prescription = Prescription.query.get(int(prescription_id))
+    # prescription.to_show_in_html()
+    return render_template("prescription_details.html",
+                            prescription = prescription,
+                            **prescription_context
+                            )
+
+
+@views.route("/prescription_details/<int:prescription_id>/edit", methods = ["GET", "POST"])
+@login_required
+def prescription_edit(prescription_id):
+    if request.method == "GET":
+        prescription = Prescription.query.get(int(prescription_id))
+        # prescription.to_show_in_html()
+        return render_template("prescription_edit.html",
+                                prescription = prescription,
+                                **prescription_context
+                                )
+    elif request.method == "POST":
+        prescription_update_from_dictionary(request.form)
+        return redirect(url_for("views.prescription_search"))
 
 
 @views.route("/prescription_new", methods=["GET", "POST"])
