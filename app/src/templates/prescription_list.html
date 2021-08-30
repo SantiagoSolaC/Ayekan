@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a class="btn btn-primary" href="{{ url_for('views.prescription_new') }}">Nueva medicación</a>
+<hr>
 <div class="card">
 	<div class="card-header">
 		<ul class="nav nav-tabs card-header-tabs">
@@ -32,10 +34,14 @@
 				{% for prescription in prescription_list %}
 				<tr>
 					<td>{{ prescription.resident.nickname }}</td>
-					<td>{{ prescription.medications[0].commercial_name }}</td>
+					<td>
+						{% for medication in prescription.medications %}
+						{{ medication.commercial_name }} -
+						{% endfor %}
+					</td>
 					<td>{{ prescription.in_pillbox }}</td>
 					<td>
-						<a href="#" class="btn btn-primary btn-sm">Ver</a>
+						<a href="{{ url_for('views.prescription_details', prescription_id = prescription.id) }}" class="btn btn-primary btn-sm">Ver</a>
 					</td>
 				</tr>
 				{% endfor %}
