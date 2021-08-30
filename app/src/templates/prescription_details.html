@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('views.prescription_search') }}">Buscar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('views.prescription_list') }}">Lista</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active disabled" href="#" aria-current="true" aria-disabled="true">Ver</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Editar</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2">Detalles de prescripcion</h6>
+        <br>
+        <form class="row g-3">
+            <div class="col-auto d-none" aria-hidden="true">
+                <label for="ID" class="form-label">ID</label>
+                <input type="text" class="form-control" name="id" readonly value="{{ prescription.id }}">
+            </div>
+            <div class="col-auto">
+                <label for="resident" class="form-label">Residente</label>
+                <input type="text" class="form-control" name="resident" readonly value="{{ prescription.resident.nickname }}, {{ prescription.resident.name }} {{ prescription.resident.last_name }}">
+            </div>
+            <div class="col-auto">
+                <label for="madications" class="form-label">Medicaciones</label>
+                <input type="text" class="form-control" name="medications" readonly value="{% for medication in prescription.medications %}{{ medication.commercial_name }} ; {% endfor %}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="administration_route" class="form-label">Via de administracion</label>
+                <input type="text" class="form-control" name="administration_route" readonly value="{{ prescription.administration_route }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="breakfast" class="form-label">Desayuno</label>
+                <input type="text" class="form-control" name="breakfast" readonly value="{{ prescription.breakfast }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="lunch" class="form-label">Almuerzo</label>
+                <input type="text" class="form-control" name="lunch" readonly value="{{ prescription.lunch }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="tea" class="form-label">Merienda</label>
+                <input type="text" class="form-control" name="tea" readonly value="{{ prescription.tea }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="dinner" class="form-label">Cena</label>
+                <input type="text" class="form-control" name="dinner" readonly value="{{ prescription.dinner }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="medication_status" class="form-label">Estado de la medicacion</label>
+                <input type="text" class="form-control" name="medication_status" readonly value="{{ prescription.medication_status }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="prescription_date" class="form-label">Fecha de la prescripcion</label>
+                <input type="date" class="form-control" name="prescription_date" readonly value="{{ prescription.prescription_date }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="last_registry_date" class="form-label">Fecha de la ultima modificacion</label>
+                <input type="date" class="form-control" name="last_registry_date" readonly value="{{ prescription.last_registry_date }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="in_pillbox" class="form-label">En pastillero</label>
+                <input type="text" class="form-control" name="in_pillbox" readonly value="{{ prescription.in_pillbox }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="floor" class="form-label">Piso</label>
+                <input type="text" class="form-control" name="floor" readonly value="{{ prescription.floor }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="stocks" class="form-label">Stock</label>
+                <input type="real" class="form-control" name="stocks" readonly value="{{ prescription.stocks.amount }}">
+            </div>
+            <div class="col-auto" class="form-label">
+                <label for="notes" class="form-label">Notas</label>
+                <input type="text" class="form-control" name="notes" readonly value="{{ prescription.notes }}">
+            </div>
+            <div class="col-12">
+                <a href="{{ url_for('views.prescription_list_from_resident', resident_id = prescription.resident.id) }}" class="btn btn-primary">Volver</a>
+                <a href="{{ url_for('views.prescription_edit', prescription_id = prescription.id) }}" class="btn btn-primary">Editar</a>
+                <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
