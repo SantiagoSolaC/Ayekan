@@ -282,11 +282,13 @@ def prescription_edit(prescription_id):
 def prescription_new():
     if request.method == "GET":
         medication_list = Medication.query.all()
+        resident_list = Resident.query.all()
         return render_template(
             "prescription_new.html",
             active_item="prescription",
             user=current_user,
             medication_list=medication_list,
+            resident_list=resident_list
         )
     elif request.method == "POST":
         prescription = prescription_from_dictionary(request.form)

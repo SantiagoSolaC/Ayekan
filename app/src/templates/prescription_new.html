@@ -11,17 +11,23 @@
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">Nueva prescripción</h6>
         <form class="row g-3 needs-validation" method="post" action="/prescription_new">
-            <!-- <div class="col-md-3">
+            <div class="col-md-6">
                 <label for="resident_id" class="form-label">Residente</label>
-                <input type="text" class="form-control" name="resident_id" value="{{ resident_id }}">
-            </div> -->
-            <div class="col-md-3">
-                <label for="medication_id" class="form-label">Medicación</label>
-                <select class="form-select" aria-label="Default select example" name="medication_id">
-                    {% for medication in medication_list %}
-                        <option value="{{ medication.id }}">{{ medication.commercial_name }}</option>
+                <input class="form-control" name="resident_id" list="resident" placeholder="Apodo, nombre apellido">
+                <datalist id="resident">
+                    {% for resident in resident_list %}
+                        <option value="{{ resident.id }}" aria-hidden="true">{{ resident.nickname }}, {{ resident.name }} {{ resident.last_name }}
                     {% endfor %}
-                </select>
+                </datalist>             
+            </div>
+            <div class="col-md-6">
+                <label for="medication_id" class="form-label">Medicacion</label>
+                <input class="form-control" name="medication_id" list="medication" placeholder="Nombre comercial: droga">
+                <datalist id="medication">
+                    {% for medication in medication_list %}
+                        <option value="{{ medication.id }}">{{ medication.commercial_name }}: {{ medication.drug_name }}
+                    {% endfor %}
+                </datalist>             
             </div>
             <div class="col-md-3">
                 <label for="administration_route" class="form-label">Vía de administración</label>
@@ -60,6 +66,14 @@
                 <label for="dinner" class="form-label">Cena</label>
                 <input type="number" step="0.5" class="form-control" name="dinner" value="{{ dinner }}">
             </div>
+            <div class="col-md-3">
+                <label for="medication_status" class="form-label">Estado de la medicacion</label>
+                <select class="form-select" aria-label="Default select example" name="medication_status">
+                    <option {{ 'selected' if medication_status == 'Activo' else '' }}>Activo</option>
+                    <option {{ 'selected' if medication_status == 'Suspendido' else '' }}>Suspendido</option>
+                    <option {{ 'selected' if medication_status == 'SOS' else '' }}>SOS</option>
+                </select>
+            </div>
             <div class="col-md-2">
                 <label for="in_pillbox" class="form-label">En pastillero</label>
                 <select class="form-select" aria-label="Default select example" name="in_pillbox">
@@ -68,15 +82,15 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label for="prescription_date" class="form-label">Fecha de prescripción</label>
-                <input type="date" class="form-control" name="prescription_date" value="{{ prescription_date }}" required>
-            </div>
-            <div class="col-md-3">
                 <label for="floor" class="form-label">Planta a la que corresponde el residente</label>
                 <select class="form-select" aria-label="Default select example" name="floor">
                     <option {{ 'selected' if floor == 'A' else '' }}>A</option>
                     <option {{ 'selected' if floor == 'B' else '' }}>B</option>
                 </select>
+            </div>
+            <div class="col-md-3">
+                <label for="prescription_date" class="form-label">Fecha de prescripción</label>
+                <input type="date" class="form-control" name="prescription_date" value="{{ prescription_date }}" required>
             </div>
             <div class="col-md-6">
                 <label for="notes" class="form-label">Notas</label>

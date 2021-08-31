@@ -121,21 +121,9 @@ def resident_update_from_dictionary(request_form):
 # medication_presciption table creation (relationship between medication and prescription tables).
 
 
-medication_prescription = db.Table(
-    "medication_prescription",
-    db.Column(
-        "medication_id", 
-        db.Integer, 
-        db.ForeignKey("medication.id"), 
-        primary_key=True
-    ),
-    db.Column(
-        "prescription_id",
-        db.Integer,
-        db.ForeignKey("prescription.id"),
-        primary_key=True
-    ),
-)
+medication_prescription = db.Table("medication_prescription",
+    db.Column("medication_id", db.Integer, db.ForeignKey("medication.id"), primary_key=True),
+    db.Column("prescription_id", db.Integer, db.ForeignKey("prescription.id"), primary_key=True))
 
 
 # Medication table creation with its functions.
@@ -149,8 +137,7 @@ class Medication(db.Model):
     measurement_unit = db.Column(db.String(50), nullable=False)
     amount = db.Column(db.Float)
     stocks = db.relationship("Stock", backref="medication")
-    # prescriptions = db.relationship(
-    #     "Prescription", secondary=medication_prescription)
+    prescriptions = db.relationship("Prescription", secondary=medication_prescription, back_populates="medications")
 
     def to_show_in_html(self):
         self.drug_name.title()
@@ -161,8 +148,6 @@ class Medication(db.Model):
         self.drug_name.lower()
         self.commercial_name.lower()
         self.pharmaceutical_form.lower()
-
-    stocks = db.relationship("Stock", backref="medication")
 
 
 def medication_instance_from_dictionary(medication_dictionary):
@@ -200,34 +185,14 @@ def medication_update_from_dictionary(request_form):
     db.session.commit()
 
 
-# Stock table creation.
-
-
-class Stock(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    resident_id = db.Column(db.Integer, db.ForeignKey(
-        "resident.id"), nullable=False)
-    medication_id = db.Column(
-        db.Integer, db.ForeignKey("medication.id"), nullable=False
-    )
-    prescription_id = db.Column(
-        db.Integer, db.ForeignKey("prescription.id"), nullable=False
-    )
-    amount = amount = db.Column(db.Float)
-    notes = db.Column(db.String(200))
-    date = db.Column(db.Date, nullable=False)
-
-
 # Prescription table creation with its functions.
 
 
 class Prescription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    resident_id = db.Column(db.Integer, db.ForeignKey(
-        "resident.id"), nullable=False)
+    resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable=False)
     # medication_id = db.Column(db.Integer, db.ForeignKey('medication.id'), nullable = False)
-    medications = db.relationship(
-        "Medication", secondary=medication_prescription)
+    medications = db.relationship("Medication", secondary=medication_prescription, back_populates="prescriptions")
     administration_route = db.Column(db.String(100), nullable=False)
     breakfast = db.Column(db.Integer)
     lunch = db.Column(db.Integer)
@@ -280,8 +245,7 @@ def prescription_from_dictionary(prescription_dictionary):
     new_prescription = Prescription(
         resident_id=prescription_dictionary.get("resident_id"),
         # medications = prescription_dictionary.get("medication_id"),
-        administration_route=prescription_dictionary.get(
-            "administration_route"),
+        administration_route=prescription_dictionary.get("administration_route"),
         breakfast=prescription_dictionary.get("breakfast"),
         lunch=prescription_dictionary.get("lunch"),
         tea=prescription_dictionary.get("tea"),
@@ -301,3 +265,22 @@ def prescription_update_from_dictionary(request_form):
     db.session.query(Prescription).filter_by(
         id=request_form.get("id")).update(request_form)
     db.session.commit()
+
+
+# Stock table creation.
+
+
+class Stock(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    resident_id = db.Column(db.Integer, db.ForeignKey(
+        "resident.id"), nullable=False)
+    medication_id = db.Column(
+        db.Integer, db.ForeignKey("medication.id"), nullable=False
+    )
+    prescription_id = db.Column(
+        db.Integer, db.ForeignKey("prescription.id"), nullable=False
+    )
+    amount = amount = db.Column(db.Float)
+    notes = db.Column(db.String(200))
+    date = db.Column(db.Date, nullable=False)
+
