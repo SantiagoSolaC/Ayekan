@@ -11,44 +11,21 @@
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">Nueva prescripción</h6>
         <form class="row g-3 needs-validation" method="post" action="/prescription_new">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="resident_id" class="form-label">Residente</label>
-                <input class="form-control" name="resident_id" list="resident" placeholder="Apodo, nombre apellido">
-                <datalist id="resident">
+                <select class="form-select" aria-label="Default select example" name="resident_id">
                     {% for resident in resident_list %}
-                        <option value="{{ resident.id }}" aria-hidden="true">{{ resident.nickname }}, {{ resident.name }} {{ resident.last_name }}
+                        <option value="{{ resident.id }}">{{ resident.nickname }}, {{ resident.name }} {{ resident.last_name }}</option>
                     {% endfor %}
-                </datalist>             
+                </select>           
             </div>
-            <div class="col-md-6">
-                <label for="medication_id" class="form-label">Medicacion</label>
-                <input class="form-control" name="medication_id" list="medication" placeholder="Nombre comercial: droga">
-                <datalist id="medication">
+            <div class="col-md-8">
+                <label for="medication_id" class="form-label">Medicación</label>
+                <select class="form-select" aria-label="Default select example" name="medication_id">
                     {% for medication in medication_list %}
-                        <option value="{{ medication.id }}">{{ medication.commercial_name }}: {{ medication.drug_name }}
+                        <option value="{{ medication.id }}">{{ medication.commercial_name }}: {{ medication.drug_name }}</option>
                     {% endfor %}
-                </datalist>             
-            </div>
-            <div class="col-md-3">
-                <label for="administration_route" class="form-label">Vía de administración</label>
-                <select class="form-select" aria-label="Default select example" name="administration_route">
-                    <option {{ 'selected' if administration_route == 'Capsulas' else '' }}>Capsulas</option>
-                    <option {{ 'selected' if administration_route == 'Crema' else '' }}>Crema</option>
-                    <option {{ 'selected' if administration_route == 'Dosis' else '' }}>Dosis</option>
-                    <option {{ 'selected' if administration_route == 'Gel' else '' }}>Gel</option>
-                    <option {{ 'selected' if administration_route == 'Gotas' else '' }}>Gotas</option>
-                    <option {{ 'selected' if administration_route == 'Gotas Oftal' else '' }}>Gotas Oftal</option>
-                    <option {{ 'selected' if administration_route == 'Gotas Orales' else '' }}>Gotas Orales</option>
-                    <option {{ 'selected' if administration_route == 'Inyectable' else '' }}>Inyectable</option>
-                    <option {{ 'selected' if administration_route == 'Jarabe' else '' }}>Jarabe</option>
-                    <option {{ 'selected' if administration_route == 'Loción' else '' }}>Loción</option>
-                    <option {{ 'selected' if administration_route == 'Oral' else '' }}>Oral</option>
-                    <option {{ 'selected' if administration_route == 'Paff' else '' }}>Paff</option>
-                    <option {{ 'selected' if administration_route == 'Parche' else '' }}>Parche</option>
-                    <option {{ 'selected' if administration_route == 'Polvo' else '' }}>Polvo</option>
-                    <option {{ 'selected' if administration_route == 'Pomada' else '' }}>Pomada</option>
-                    <option {{ 'selected' if administration_route == 'Suplemento' else '' }}>Suplemento</option>
-                </select>
+                </select>                  
             </div>
             <div class="col-md-1">
                 <label for="breakfast" class="form-label">Desayuno</label>

@@ -32,34 +32,13 @@
                 <input type="text" class="form-control" value="{{ prescription.resident.nickname }}, {{ prescription.resident.name }} {{ prescription.resident.last_name }}" required readonly>
             </div>
             <!-- <div class="col-auto">
-                <label for="medications" class="form-label">Medicación</label>
-                <select class="form-select" aria-label="Default select example" name="medications">
+                <label for="medication_id" class="form-label">Medicación</label>
+                <select class="form-select" aria-label="Default select example" name="medication_id">
                     {% for medication in prescription.medications %}
                     <option value="{{ medication.id }}">{{ medication.commercial_name }}</option>
                     {% endfor %}
                 </select>
             </div> -->
-            <div class="col-auto">
-                <label for="administration_route" class="form-label">Vía de administración</label>
-                <select class="form-select" aria-label="Default select example" name="administration_route">
-                    <option {{ 'selected' if prescription.administration_route == 'Capsulas' else '' }}>Capsulas</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Crema' else '' }}>Crema</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Dosis' else '' }}>Dosis</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Gel' else '' }}>Gel</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Gotas' else '' }}>Gotas</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Gotas Oftal' else '' }}>Gotas Oftal</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Gotas Orales' else '' }}>Gotas Orales</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Inyectable' else '' }}>Inyectable</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Jarabe' else '' }}>Jarabe</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Loción' else '' }}>Loción</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Oral' else '' }}>Oral</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Paff' else '' }}>Paff</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Parche' else '' }}>Parche</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Polvo' else '' }}>Polvo</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Pomada' else '' }}>Pomada</option>
-                    <option {{ 'selected' if prescription.administration_route == 'Suplemento' else '' }}>Suplemento</option>
-                </select>
-            </div>
             <div class="col-md-1">
                 <label for="breakfast" class="form-label">Desayuno</label>
                 <input type="number" step="0.5" class="form-control" name="breakfast" value="{{ prescription.breakfast }}">

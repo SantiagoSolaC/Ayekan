@@ -11,7 +11,7 @@ from app.src.models import (
     medication_instance_from_dictionary,
     medication_update_from_dictionary,
     Prescription,
-    prescription_from_dictionary,
+    prescription_instance_from_dictionary,
     prescription_search_by_value,
     prescription_update_from_dictionary,
     medication_prescription
@@ -255,9 +255,11 @@ def prescription_list():
 @login_required
 def prescription_details(prescription_id):
     prescription = Prescription.query.get(int(prescription_id))
+    administration_route = prescription.medications[0].pharmaceutical_form
     # prescription.to_show_in_html()
     return render_template("prescription_details.html",
                             prescription = prescription,
+                            administration_route = administration_route,
                             **prescription_context
                             )
 
@@ -274,6 +276,7 @@ def prescription_edit(prescription_id):
                                 )
     elif request.method == "POST":
         prescription_update_from_dictionary(request.form)
+        
         return redirect(url_for("views.prescription_search"))
 
 
@@ -291,7 +294,9 @@ def prescription_new():
             resident_list=resident_list
         )
     elif request.method == "POST":
-        prescription = prescription_from_dictionary(request.form)
+        prescription = prescription_instance_from_dictionary(request.form) 
+        medication = Medication.query.get(request.form.get("medication_id"))
+        prescription.medications.append(medication)
         db.session.add(prescription)
         db.session.commit()
         return redirect(url_for("views.prescription_search"))
