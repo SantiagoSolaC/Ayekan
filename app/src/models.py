@@ -5,26 +5,25 @@ from app import db
 
 
 class Resident(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.String(50), nullable=False)
-    admission_date = db.Column(db.String(10), nullable=False)
+    id = db.Column(db.Integer, primary_key = True)
+    status = db.Column(db.String(50), nullable = False)
+    admission_date = db.Column(db.String(10), nullable = False)
     nickname = db.Column(db.String(50))
-    name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    birth_date = db.Column(db.String(10), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    gender = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), nullable = False)
+    last_name = db.Column(db.String(50), nullable = False)
+    birth_date = db.Column(db.String(10), nullable = False)
+    age = db.Column(db.Integer, nullable = False)
+    gender = db.Column(db.String(50), nullable = False)
     citizenship = db.Column(db.String(50))
     marital_status = db.Column(db.String(50))
-    address = db.Column(db.String(100), nullable=False)
-    city = db.Column(db.String(100), nullable=False)
-    id_type = db.Column(db.String(50), nullable=False)
-    id_number = db.Column(db.String(50), nullable=False, unique=True)
+    address = db.Column(db.String(100), nullable = False)
+    city = db.Column(db.String(100), nullable = False)
+    id_type = db.Column(db.String(50), nullable = False)
+    id_number = db.Column(db.String(50), nullable = False, unique = True)
     prepaid = db.Column(db.String(100))
     affiliation_number = db.Column(db.String(100))
 
-    stocks = db.relationship("Stock", backref="resident")
-    prescriptions = db.relationship("Prescription", backref="resident")
+    prescriptions = db.relationship("Prescription", backref = "resident")
 
     def to_show_in_html(self):
         self.status = self.status.title()
@@ -118,27 +117,26 @@ def resident_update_from_dictionary(request_form):
     db.session.commit()
 
 
-# medication_presciption table creation (relationship between medication and prescription tables).
+# medication_stock table creation (relationship between stock and medication tables).
 
 
-medication_prescription = db.Table("medication_prescription",
-    db.Column("medication_id", db.Integer, db.ForeignKey("medication.id"), primary_key=True),
-    db.Column("prescription_id", db.Integer, db.ForeignKey("prescription.id"), primary_key=True))
+medication_stock = db.Table("prescription_stock",
+    db.Column("stock_id", db.Integer, db.ForeignKey("stock.id"), primary_key = True),
+    db.Column("medication_id", db.Integer, db.ForeignKey("medication.id"), primary_key = True))
 
 
 # Medication table creation with its functions.
 
 
 class Medication(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    drug_name = db.Column(db.String(100), nullable=False)
-    commercial_name = db.Column(db.String(100), nullable=False, unique=True)
-    pharmaceutical_form = db.Column(db.String(50), nullable=False)
-    measurement_unit = db.Column(db.String(50), nullable=False)
+    id = db.Column(db.Integer, primary_key = True)
+    drug_name = db.Column(db.String(100), nullable = False)
+    commercial_name = db.Column(db.String(100), nullable = False)
+    pharmaceutical_form = db.Column(db.String(50), nullable = False)
+    measurement_unit = db.Column(db.String(50), nullable = False)
     amount = db.Column(db.Float)
     
-    stocks = db.relationship("Stock", backref="medication")
-    # prescriptions = db.relationship("Prescription", secondary=medication_prescription, back_populates="medications")
+    stock = db.relationship("Stock", secondary = medication_stock, backref = "medication")
 
     def to_show_in_html(self):
         self.drug_name.title()
@@ -190,21 +188,20 @@ def medication_update_from_dictionary(request_form):
 
 
 class Prescription(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key = True)
+    resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable = False) 
     breakfast = db.Column(db.Float)
     lunch = db.Column(db.Float)
     tea = db.Column(db.Float)
     dinner = db.Column(db.Float)
     notes = db.Column(db.String(200))
     medication_status = db.Column(db.String(100))
-    prescription_date = db.Column(db.String(20), nullable=False)
+    prescription_date = db.Column(db.String(20), nullable = False)
     last_registry_date = db.Column(db.String(20))
-    in_pillbox = db.Column(db.String(50), nullable=False)
-    floor = db.Column(db.String(50), nullable=False)
-
-    resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable=False) 
-    medications = db.relationship("Medication", secondary=medication_prescription, backref=db.backref("prescriptions"))
-    stocks = db.relationship("Stock", backref="prescription")
+    in_pillbox = db.Column(db.String(50), nullable = False)
+    floor = db.Column(db.String(50), nullable = False)
+    
+    stocks = db.relationship("Stock", backref = "prescription")
 
     def to_show_in_html(self):
         self.resident_id = self.resident_id.nickname.upper()
@@ -263,20 +260,26 @@ def prescription_update_from_dictionary(request_form):
     db.session.commit()
     
     
+# presciption_stock table creation (relationship between stock and prescription tables).
+
+
+prescription_stock = db.Table("prescription_stock",
+    db.Column("stock_id", db.Integer, db.ForeignKey("stock.id"), primary_key = True),
+    db.Column("prescription_id", db.Integer, db.ForeignKey("prescription.id"), primary_key = True))
+
+
 # Stock table creation.
 
 
 class Stock(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    resident_id = db.Column(db.Integer, db.ForeignKey(
-        "resident.id"), nullable=False)
-    medication_id = db.Column(
-        db.Integer, db.ForeignKey("medication.id"), nullable=False
-    )
-    prescription_id = db.Column(
-        db.Integer, db.ForeignKey("prescription.id"), nullable=False
-    )
+    id = db.Column(db.Integer, primary_key = True)
+    # resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable = False)
+    medication_id = db.Column(db.Integer, db.ForeignKey("medication.id"), nullable = False)
+    # prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable = False)
     amount = amount = db.Column(db.Float)
     notes = db.Column(db.String(200))
-    date = db.Column(db.Date, nullable=False)
+    date = db.Column(db.Date, nullable = False)
+    
+    # medications = db.relationship("Medication", backref = "stock")
+    prescriptions = db.relationship("Prescription", secondary = prescription_stock, backref = db.backref("stocks"))
 
