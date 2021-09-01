@@ -258,14 +258,6 @@ def prescription_instance_from_dictionary(prescription_dictionary):
 def prescription_update_from_dictionary(request_form):
     db.session.query(Prescription).filter_by(id=request_form.get("id")).update(request_form)
     db.session.commit()
-    
-    
-# presciption_stock table creation (relationship between stock and prescription tables).
-
-
-prescription_stock = db.Table("prescription_stock",
-    db.Column("stock_id", db.Integer, db.ForeignKey("stock.id"), primary_key = True),
-    db.Column("prescription_id", db.Integer, db.ForeignKey("prescription.id"), primary_key = True))
 
 
 # Stock table creation.
@@ -273,13 +265,9 @@ prescription_stock = db.Table("prescription_stock",
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    # resident_id = db.Column(db.Integer, db.ForeignKey("resident.id"), nullable = False)
-    medication_id = db.Column(db.Integer, db.ForeignKey("medication.id"), nullable = False)
-    # prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable = False)
+    prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable = False)
     amount = amount = db.Column(db.Float)
     notes = db.Column(db.String(200))
     date = db.Column(db.Date, nullable = False)
     
-    # medications = db.relationship("Medication", backref = "stock")
-    prescriptions = db.relationship("Prescription", secondary = prescription_stock, backref = db.backref("stocks"))
-
+    medications = db.relationship("Medication", secondary = medication_stock, backref = "stock")
