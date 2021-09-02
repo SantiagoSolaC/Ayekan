@@ -168,6 +168,19 @@ def medication_update_from_dictionary(request_form):
     db.session.commit()
 
 
+# Stock table creation.
+
+
+class Stock(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable = False)
+    amount = amount = db.Column(db.Float)
+    notes = db.Column(db.String(200))
+    date = db.Column(db.Date, nullable = False)
+    
+    medications = db.relationship("Medication", secondary = medication_stock, backref = "stock")
+
+
 # Prescription table creation with its functions.
 
 
@@ -199,6 +212,15 @@ class Prescription(db.Model):
         self.administration_route.lower()
         self.in_pillbox.lower()
         self.floor.lower()
+
+    def days_left(self):
+        total_per_day = self.breakfast + self.lunch + self.tea + self.dinner
+        stock_list = Stock.query.filter(Stock.prescription_id == self.id).all()
+        amount = 0
+        for stock in stock_list:
+            amount += stock.amount
+        days_left = amount / total_per_day
+        return days_left
 
 
 def prescription_search_by_value(select_field, imput_field):
@@ -242,16 +264,3 @@ def prescription_instance_from_dictionary(prescription_dictionary):
 def prescription_update_from_dictionary(request_form):
     db.session.query(Prescription).filter_by(id=request_form.get("id")).update(request_form)
     db.session.commit()
-
-
-# Stock table creation.
-
-
-class Stock(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable = False)
-    amount = amount = db.Column(db.Float)
-    notes = db.Column(db.String(200))
-    date = db.Column(db.Date, nullable = False)
-    
-    medications = db.relationship("Medication", secondary = medication_stock, backref = "stock")

@@ -34,11 +34,7 @@
 				{% for prescription in prescription_list %}
 				<tr>
 					<td>{{ prescription.resident.nickname }}</td>
-					<td>
-						{% for medication in prescription.medications %}
-						{{ medication.commercial_name }}
-						{% endfor %}
-					</td>
+					<td>{{ medication.commercial_name }}</td>
 					<td>{{ prescription.in_pillbox }}</td>
 					<td>
 						<a href="{{ url_for('views.prescription_details', prescription_id = prescription.id) }}" class="btn btn-primary btn-sm">Ver</a>

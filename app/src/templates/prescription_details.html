@@ -31,14 +31,12 @@
                 <input type="text" class="form-control" name="resident" readonly value="{{ prescription.resident.nickname }}, {{ prescription.resident.name }} {{ prescription.resident.last_name }}">
             </div>
             <div class="col-md-8">
-                <label for="madications" class="form-label">Medicacion</label>
-                {% for medication in prescription.medications %}
-                    <input type="text" class="form-control" name="medications" readonly value="{{ medication.commercial_name }}">
-                {% endfor %}
+                <label for="madication" class="form-label">Medicacion</label>
+                <input type="text" class="form-control" name="medication" readonly value="{{ medication.commercial_name }}">
             </div>
             <div class="col-2" class="form-label">
                 <label for="administration_route" class="form-label">Via de administracion</label>
-                <input type="text" class="form-control" name="administration_route" readonly value="{{ administration_route }}">
+                <input type="text" class="form-control" name="administration_route" readonly value="{{ medication.pharmaceutical_form }}">
             </div>
             <div class="col-md-1" class="form-label">
                 <label for="breakfast" class="form-label">Desayuno</label>
@@ -57,8 +55,8 @@
                 <input type="text" class="form-control" name="dinner" readonly value="{{ prescription.dinner }}">
             </div>
             <div class="col-md-2" class="form-label">
-                <label for="stocks" class="form-label">Stock</label>
-                <input type="real" class="form-control" name="stocks" readonly value="{{ prescription.stocks.amount }}">
+                <label for="days_left" class="form-label">Dias restantes</label>
+                <input type="real" class="form-control" name="days_left" readonly value="{{ prescription.days_left() }}">
             </div>
             <div class="col-md-2" class="form-label">
                 <label for="in_pillbox" class="form-label">En pastillero</label>
