@@ -19,49 +19,43 @@
           </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Editar Medicacion</h6>
         <form class="row g-3 needs-validation" method="post" action="/medication_edit/{{ medication.id }}/edit">
             <div class="col-md-1" style="display: none;">
                 <label for="id" class="form-label">ID</label>
                 <input type="text" class="form-control" name="id" readonly value="{{ medication.id }}">
             </div>
-            <div class="col-auto">
+            <div class="col-md-12">
                 <label for="drug_name" class="form-label">Nombre de la droga</label>
-                <input type="text" class="form-control" name="drug_name" value="{{ medication.drug_name }}">
+                <input type="text" class="form-control" name="drug_name" value="{{ medication.drug_name.title() }}" required>
             </div>
-            <div class="col-auto">
+            <div class="col-md-12">
                 <label for="commercial_name" class="form-label">Nombre comercial</label>
-                <input type="text" class="form-control" name="commercial_name" value="{{ medication.commercial_name }}">
+                <input type="text" class="form-control" name="commercial_name" value="{{ medication.commercial_name.title() }}" required>
             </div>
-            <div class="col-auto">
+            <div class="col-md-4">
                 <label for="pharmaceutical_form" class="form-label">Forma farmaceutica</label>
                 <select class="form-select" aria-label="Default select example" name="pharmaceutical_form" required>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Capsulas' else '' }}>Capsulas</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Crema' else '' }}>Crema</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Dosis' else '' }}>Dosis</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gel' else '' }}>Gel</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gotas' else '' }}>Gotas</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gotas Oftalmologicas' else '' }}>Gotas Oftalmologicas</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Gotas Orales' else '' }}>Gotas Orales</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Inyectable' else '' }}>Inyectable</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Jarabe' else '' }}>Jarabe</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Loción' else '' }}>Loción</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Oral' else '' }}>Oral</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Paff' else '' }}>Paff</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Parche' else '' }}>Parche</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Polvo' else '' }}>Polvo</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Pomada' else '' }}>Pomada</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Suplemento' else '' }}>Suplemento</option>
-                    <option {{ 'selected' if medication.pharmaceutical_form == 'Otro' else '' }}>Otro</option>
+                    {% set pharmaceutical_form_list = [ "capsulas", "crema", "dosis", "gel", "gotas", "gotas oftalmologicas", "gotas orales", 
+                    "inyectables", "jarabe", "locion", "oral", "paff", "parche", "polvo", "pomada", "suplemento", "otro"] %}
+                    <option value="" disabled selected hidden>Seleccione uno</option>
+                    {% for form in pharmaceutical_form_list %}
+                        <option value="{{ form }}">{{ form.title() }}</option>
+                    {% endfor %}
                 </select>
             </div>
-            <div class="col-auto">
+            <div class="col-md-4">
                 <label for="measurement_unit" class="form-label">Unidad de medida</label>
-                <input type="text" class="form-control" name="measurement_unit" value="{{ medication.measurement_unit }}">
+                <select class="form-select" name="measurement_unit" required>
+                    {% set measurement_unit_list = [ "mg", "g", "kg", "unidades"] %}
+                    <option value="" disabled selected hidden>Seleccione uno</option>
+                    {% for unit in measurement_unit_list %}
+                        <option value="{{ unit }}">{{ unit.title() }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="col-auto">
+            <div class="col-md-4">
                 <label for="amount" class="form-label">Cantidad</label>
-                <input type="real" class="form-control" name="amount" value="{{ medication.amount }}">
+                <input type="real" class="form-control" name="amount" value="{{ medication.amount }}" required>
             </div>
             <div class="col-auto">
                 <a href="{{ url_for('views.medication_details', id=medication.id) }}" class="btn btn-primary">Volver</a>

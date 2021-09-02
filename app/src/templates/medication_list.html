@@ -33,12 +33,11 @@
             <tbody>
                 {% for medication in medication_list %}
                 <tr>
-                    <td>{{ medication.commercial_name }}</td>
-                    <td>{{ medication.drug_name }}</td>
-                    <td>{{ medication.pharmaceutical_form }}</td>
+                    <td>{{ medication.commercial_name.title() }}</td>
+                    <td>{{ medication.drug_name.title() }}</td>
+                    <td>{{ medication.pharmaceutical_form.title() }}</td>
                     <td>
-                        <a href="{{ url_for('views.medication_details', id = medication.id) }}"
-                            class="btn btn-primary btn-sm">Ver</a>
+                        <a href="{{ url_for('views.medication_details', id = medication.id) }}" class="btn btn-primary btn-sm">Ver</a>
                     </td>
                 </tr>
                 {% endfor %}

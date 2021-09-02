@@ -120,7 +120,7 @@ def resident_update_from_dictionary(request_form):
 # medication_stock table creation (relationship between stock and medication tables).
 
 
-medication_stock = db.Table("prescription_stock",
+medication_stock = db.Table("medication_stock",
     db.Column("stock_id", db.Integer, db.ForeignKey("stock.id"), primary_key = True),
     db.Column("medication_id", db.Integer, db.ForeignKey("medication.id"), primary_key = True))
 
@@ -136,51 +136,35 @@ class Medication(db.Model):
     measurement_unit = db.Column(db.String(50), nullable = False)
     amount = db.Column(db.Float)
     
-    stock = db.relationship("Stock", secondary = medication_stock, backref = "medication")
-
-    def to_show_in_html(self):
-        self.drug_name.title()
-        self.commercial_name.title()
-        self.pharmaceutical_form.title()
-
-    def to_store_in_db(self):
-        self.drug_name.lower()
-        self.commercial_name.lower()
-        self.pharmaceutical_form.lower()
+    stocks = db.relationship("Stock", secondary = medication_stock, backref = "medication")
 
 
 def medication_instance_from_dictionary(medication_dictionary):
     new_medication = Medication(
-        drug_name=medication_dictionary.get("drug_name"),
-        commercial_name=medication_dictionary.get("commercial_name"),
-        pharmaceutical_form=medication_dictionary.get("pharmaceutical_form"),
-        measurement_unit=medication_dictionary.get("measurement_unit"),
-        amount=medication_dictionary.get("amount")
+        drug_name = medication_dictionary.get("drug_name"),
+        commercial_name = medication_dictionary.get("commercial_name"),
+        pharmaceutical_form = medication_dictionary.get("pharmaceutical_form"),
+        measurement_unit = medication_dictionary.get("measurement_unit"),
+        amount = medication_dictionary.get("amount")
     )
-    new_medication.to_store_in_db()
     return new_medication
 
 
 def medication_search_by_value(select_field, imput_field):
     if select_field == "commercial_name":
         if imput_field != "":
-            medication_list = Medication.query.filter(
-                Medication.commercial_name.like(imput_field)
-            ).all()
+            medication_list = Medication.query.filter(Medication.commercial_name.like(imput_field)).all()
             return medication_list
         else:
             medication_list = Medication.query.all()
             return medication_list
     elif select_field == "drug_name":
-        medication_list = Medication.query.filter(
-            Medication.drug_name.like(imput_field)
-        ).all()
+        medication_list = Medication.query.filter(Medication.drug_name.like(imput_field)).all()
         return medication_list
 
 
 def medication_update_from_dictionary(request_form):
-    db.session.query(Medication).filter_by(
-        id=request_form.get("id")).update(request_form)
+    db.session.query(Medication).filter_by(id = request_form.get("id")).update(request_form)
     db.session.commit()
 
 

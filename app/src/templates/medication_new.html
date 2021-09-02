@@ -19,55 +19,45 @@
         </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Nueva medicacion</h6>
         <form class="row g-2" method="post">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <label for="drug_name" class="form-label">Nombre de la droga</label>
-                <input type="text" class="form-control" name="drug_name" placeholder="Nombre de la droga">
+                <input type="text" class="form-control" name="drug_name" placeholder="Nombre de la droga" required>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <label for="commercial_name" class="form-label">Nombre comercial</label>
-                <input type="text" class="form-control" name="commercial_name" placeholder="Nombre comercial">
+                <input type="text" class="form-control" name="commercial_name" placeholder="Nombre comercial"required>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-4">
                 <label for="pharmaceutical_form" class="form-label">Forma farmaceutica</label>
-                <select class="form-select" name="pharmaceutical_form">
-                    <option selected>Seleccione uno</option>
-                    <option value="Capsulas">Capsulas</option>
-                    <option value="Crema">Crema</option>
-                    <option value="Dosis">Dosis</option>
-                    <option value="Gel">Gel</option>
-                    <option value="Gotas">Gotas</option>
-                    <option value="Gotas Oftalmologicas">Gotas Oftalmologicas</option>
-                    <option value="Gotas Orales">Gotas Orales</option>
-                    <option value="Inyectable">Inyectable</option>
-                    <option value="Jarabe">Jarabe</option>
-                    <option value="Loción">Loción</option>
-                    <option value="Oral">Oral</option>
-                    <option value="Paff">Paff</option>
-                    <option value="Parche">Parche</option>
-                    <option value="Polvo">Polvo</option>
-                    <option value="Pomada">Pomada</option>
-                    <option value="Suplemento">Suplemento</option>
-                    <option value="Otro">Otro</option>
+                <select class="form-select" name="pharmaceutical_form" required>
+                    {% set pharmaceutical_form_list = [ "capsulas", "crema", "dosis", "gel", "gotas", "gotas oftalmologicas", "gotas orales", 
+                    "inyectables", "jarabe", "locion", "oral", "paff", "parche", "polvo", "pomada", "puplemento", "ptro"] %}
+                    <option value="" disabled selected hidden>Seleccione uno</option>
+                    {% for form in pharmaceutical_form_list %}
+                        <option value="{{ form }}">{{ form.title() }}</option>
+                    {% endfor %}
                 </select>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-4">
                 <label for="measurement_unit" class="form-label">Unidad de medida</label>
-                <input type="text" class="form-control" name="measurement_unit" placeholder="Unidad de medida">
+                <select class="form-select" name="measurement_unit" required>
+                    {% set measurement_unit_list = [ "mg", "g", "kg", "unidades"] %}
+                    <option value="" disabled selected hidden>Seleccione uno</option>
+                    {% for unit in measurement_unit_list %}
+                        <option value="{{ unit }}">{{ unit.title() }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-4">
                 <label for="amount" class="form-label">Cantidad</label>
-                <input type="real" class="form-control" name="amount" placeholder="Cantidad">
+                <input type="real" class="form-control" name="amount" placeholder="Cantidad" required>
             </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Aceptar</button>
-            </div>
-        </form>
-        <br>
-        <form class="row g-5">
             <div class="col-auto">
                 <a href="{{ url_for('views.medication_list') }}" class="btn btn-primary">Volver</a>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Aceptar</button>
             </div>
         </form>
     </div>
