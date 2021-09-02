@@ -6,7 +6,6 @@ from app.src.models import (
     resident_update_from_dictionary,
     resident_search_by_value,
     Medication,
-    medication_search_by_value,
     medication_instance_from_dictionary,
     medication_update_from_dictionary,
     Prescription,
@@ -17,6 +16,7 @@ from app.src.models import (
 )
 from app import db
 from . import views
+from sqlalchemy import and_, or_, not_
 
 
 @views.route("/")
@@ -93,9 +93,12 @@ medication_context = {"active_item": "medication", "user": current_user}
 @login_required
 def medication_search():
     if request.method == "GET":
-        return render_template("medication_search.html", **medication_context)
+        medication_list = Medication.query.all()
+        return render_template("medication_search.html", medication_list = medication_list, **medication_context)
     elif request.method == "POST":
-        medication_list = medication_search_by_value(request.form.get("select_field"), request.form.get("imput_field"))
+        imput_field = request.form.get("imput_field")
+        medication_list = Medication.query.filter(or_(Medication.drug_name.like(imput_field),Medication.commercial_name.like(imput_field),
+            Medication.pharmaceutical_form.like(imput_field))).all()
         return render_template("medication_list.html", medication_list = medication_list, **medication_context)
 
 

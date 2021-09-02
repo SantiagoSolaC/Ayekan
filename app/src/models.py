@@ -1,4 +1,6 @@
+from operator import and_, not_, or_
 from app import db
+from sqlalchemy import and_, or_, not_
 
 
 # Resident table creation with its functions.
@@ -148,19 +150,6 @@ def medication_instance_from_dictionary(medication_dictionary):
         amount = medication_dictionary.get("amount")
     )
     return new_medication
-
-
-def medication_search_by_value(select_field, imput_field):
-    if select_field == "commercial_name":
-        if imput_field != "":
-            medication_list = Medication.query.filter(Medication.commercial_name.like(imput_field)).all()
-            return medication_list
-        else:
-            medication_list = Medication.query.all()
-            return medication_list
-    elif select_field == "drug_name":
-        medication_list = Medication.query.filter(Medication.drug_name.like(imput_field)).all()
-        return medication_list
 
 
 def medication_update_from_dictionary(request_form):

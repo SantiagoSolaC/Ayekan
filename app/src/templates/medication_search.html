@@ -21,18 +21,15 @@
         </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Buscar medicación por campo</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Buscar medicación</h6>
         <form action="/medication_search" method="POST">
             <div class="input-group">
-                <select class="form-select" name="select_field" aria-label="Example select with button addon">
-                    <option name="commercial_name" value="commercial_name">Nombre comercial</option>
-                    <option name="drug_name" value="drug_name">Nombre de la droga</option>
-                </select>
-                <input type="text" name="imput_field" class="form-control" aria-label="Text input with segmented dropdown button" placeholder="Vacio para mostrar lista completa...">
-                <!-- <input class="form-control" list="datalistOptions" name="imput_field">
-                <datalist id="datalistOptions">
-                    <option>{{ "actron".title() }}</option>
-                </datalist> -->
+                <input class="form-control" list="lista_de_medicaciones" name="imput_field" id="imput_field" placeholder="Ingrese nombre comercial, de la droga o forma farmaceutica...">
+                <datalist id="lista_de_medicaciones">
+                    {% for medication in medication_list %}
+                        <option value="{{ medication.commercial_name.title() }}">{{ medication.drug_name.title() }}</option>
+                    {% endfor %}
+                </datalist>
                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon03">Buscar</button>
             </div>
         </form>
