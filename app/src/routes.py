@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
+from sqlalchemy import and_, or_, not_
 from app.src.models import (
     Resident,
     resident_instance_from_dictionary,
@@ -15,7 +16,6 @@ from app.src.models import (
 )
 from app import db
 from . import views
-from sqlalchemy import and_, or_, not_
 
 
 @views.route("/")
