@@ -21,16 +21,15 @@
         </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Buscar residente por campo</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Buscar residente</h6>
         <form action="/resident_search" method="POST">
             <div class="input-group">
-                <select class="form-select" name="select_field" aria-label="Example select with button addon">
-                    <option name="status" value="status">Estado</option>
-                    <option name="nickname" value="nickname">Apodo</option>
-                    <option name="name" value="name">Nombre</option>
-                    <option name="last_name" value="last_name">Apellido</option>
-                </select>
-                <input type="text" name="imput_field" class="form-control" aria-label="Text input with segmented dropdown button">
+                <input class="form-control" list="lista_de_residentes" name="imput_field" id="imput_field" placeholder="Ingrese estado, apodo, nombre o apellido del residente...">
+                <datalist id="lista_de_residentes">
+                    {% for resident in resident_list %}
+                        <option value="{{ resident.nickname.title() }}">{{ resident.name.title() }} {{ resident.last_name.title() }}</option>
+                    {% endfor %}
+                </datalist>
                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon03">Buscar</button>
             </div>
         </form>

@@ -27,68 +27,6 @@ class Resident(db.Model):
 
     prescriptions = db.relationship("Prescription", backref = "resident")
 
-    def to_show_in_html(self):
-        self.status = self.status.title()
-        self.nickname = self.nickname.upper()
-        self.name = self.name.title()
-        self.last_name = self.last_name.title()
-        self.gender = self.gender.title()
-        self.citizenship = self.citizenship.title()
-        self.marital_status = self.marital_status.title()
-        self.address = self.address.title()
-        self.city = self.city.title()
-        self.id_type = self.id_type.upper()
-        self.prepaid = self.prepaid.upper()
-
-    def to_store_in_db(self):
-        self.status = self.status.lower()
-        self.nickname = self.nickname.lower()
-        self.name = self.name.lower()
-        self.last_name = self.last_name.lower()
-        self.gender = self.gender.lower()
-        self.citizenship = self.citizenship.lower()
-        self.marital_status = self.marital_status.lower()
-        self.address = self.address.lower()
-        self.city = self.city.lower()
-        self.id_type = self.id_type.lower()
-        self.prepaid = self.prepaid.lower()
-
-
-def resident_search(value):
-    resident = Resident.query.filter(Resident.name == value).first()
-    resident_id = resident.id
-    return resident_id
-
-
-def resident_search_by_value(select_field, imput_field):
-    if select_field == "status":
-        if imput_field != "":
-            resident_list = Resident.query.filter(
-                Resident.status.like(imput_field)
-            ).all()
-            return resident_list
-        else:
-            resident_list = Resident.query.all()
-            return resident_list
-    elif select_field == "nickname":
-        resident_list = Resident.query.filter(
-            Resident.nickname.like(imput_field)).all()
-        return resident_list
-    elif select_field == "name":
-        if imput_field != "":
-            resident_list = Resident.query.filter(
-                Resident.name.like(imput_field)
-            ).all()
-            return resident_list
-        else:
-            resident_list = Resident.query.all()
-            return resident_list
-    elif select_field == "last_name":
-        resident_list = Resident.query.filter(
-            Resident.last_name.like(imput_field)
-        ).all()
-        return resident_list
-
 
 def resident_instance_from_dictionary(resident_dictionary):
     new_resident = Resident(
@@ -109,13 +47,11 @@ def resident_instance_from_dictionary(resident_dictionary):
         prepaid=resident_dictionary.get("prepaid"),
         affiliation_number=resident_dictionary.get("affiliation_number"),
     )
-    new_resident.to_store_in_db()
     return new_resident
 
 
 def resident_update_from_dictionary(request_form):
-    db.session.query(Resident).filter_by(
-        id=request_form.get("id")).update(request_form)
+    db.session.query(Resident).filter_by(id=request_form.get("id")).update(request_form)
     db.session.commit()
 
 

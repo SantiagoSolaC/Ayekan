@@ -33,9 +33,9 @@
 			<tbody>
 				{% for resident in resident_list %}
 				<tr>
-					<td>{{ resident.nickname }}</td>
-					<td>{{ resident.name }}</td>
-					<td>{{ resident.last_name }}</td>
+					<td>{{ resident.nickname.title() }}</td>
+					<td>{{ resident.name.title() }}</td>
+					<td>{{ resident.last_name.title() }}</td>
 					<td>
 						<a href="{{ url_for('views.resident_details', id = resident.id) }}" class="btn btn-primary btn-sm">Ver</a>
 					</td>

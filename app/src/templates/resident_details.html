@@ -19,81 +19,78 @@
         </ul>
     </div>
     <div class="card-body">
-        <h6 class="card-subtitle mb-2">Detalles Residente</h6>
+        <h6 class="card-subtitle mb-2">Detalles del residente</h6>
         <br>
         <form class="row g-3">
             <div class="col-md-1 d-none" aria-hidden="true">
                 <label for="ID" class="form-label">ID</label>
                 <input type="text" class="form-control" name="id" readonly value="{{ resident.id }}">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="status" class="form-label">Estado</label>
-                <input type="text" class="form-control" name="status" readonly value="{{ resident.status }}">
+                <input type="text" class="form-control" name="status" readonly value="{{ resident.status.title() }}">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="admission_date" class="form-label">Fecha de admisión</label>
                 <input type="date" class="form-control" name="admission_date" readonly value="{{ resident.admission_date }}">
             </div>
-            <div class="col-md-7"></div>
+            <div class="col-md-6"></div>
             <div class="col-md-2">
                 <label for="nickname" class="form-label">Apodo</label>
-                <input type="text" class="form-control" name="nickname" readonly value="{{ resident.nickname }}">
+                <input type="text" class="form-control" name="nickname" readonly value="{{ resident.nickname.title() }}">
             </div>
             <div class="col-md-5">
                 <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" name="name" readonly value="{{ resident.name }}">
+                <input type="text" class="form-control" name="name" readonly value="{{ resident.name.title() }}">
             </div>
             <div class="col-md-5">
                 <label for="last_name" class="form-label">Apellido</label>
-                <input type="text" class="form-control" name="last_name" readonly value="{{ resident.last_name }}">
+                <input type="text" class="form-control" name="last_name" readonly value="{{ resident.last_name.title() }}">
             </div>
             <div class="col-md-2">
                 <label for="birth_date" class="form-label">Fecha de nacimiento</label>
                 <input type="date" class="form-control" name="birth_date" readonly value="{{ resident.birth_date }}">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <label for="age" class="form-label">Edad</label>
                 <input type="number" class="form-control" name="age" readonly value="{{ resident.age }}">
             </div>
             <div class="col-md-2">
                 <label for="gender" class="form-label">Género</label>
-                <input type="text" class="form-control" name="gender" readonly value="{{ resident.gender }}">
+                <input type="text" class="form-control" name="gender" readonly value="{{ resident.gender.title() }}">
             </div>
             <div class="col-md-2">
                 <label for="citizenship" class="form-label">Ciudadanía</label>
-                <input type="text" class="form-control" name="citizenship" readonly value="{{ resident.citizenship }}">
+                <input type="text" class="form-control" name="citizenship" readonly value="{{ resident.citizenship.title() }}">
             </div>
             <div class="col-md-2">
                 <label for="marital_status" class="form-label">Estado civil</label>
-                <input type="text" class="form-control" name="marital_status" readonly value="{{ resident.marital_status }}">
+                <input type="text" class="form-control" name="marital_status" readonly value="{{ resident.marital_status.title() }}">
             </div>
-            <div class="col-md-2"></div>
             <div class="col-md-6">
                 <label for="address" class="form-label">Domicilio</label>
-                <input type="text" class="form-control" name="address" readonly value="{{ resident.address }}">
+                <input type="text" class="form-control" name="address" readonly value="{{ resident.address.title() }}">
             </div>
             <div class="col-md-6">
                 <label for="city" class="form-label">Ciudad</label>
-                <input type="text" class="form-control" name="city" readonly value="{{ resident.city }}">
+                <input type="text" class="form-control" name="city" readonly value="{{ resident.city.title() }}">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="id_type" class="form-label">Tipo de documento</label>
-                <input type="text" class="form-control" name="id_type" readonly value="{{ resident.id_type }}">
+                <input type="text" class="form-control" name="id_type" readonly value="{{ resident.id_type.upper() }}">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="id_number" class="form-label">Número de documento</label>
                 <input type="text" class="form-control" name="id_number" readonly value="{{ resident.id_number }}">
             </div>
             <div class="col-md-3">
                 <label for="prepaid" class="form-label">Obra social</label>
-                <input type="text" class="form-control" name="prepaid" readonly value="{{ resident.prepaid }}">
+                <input type="text" class="form-control" name="prepaid" readonly value="{{ resident.prepaid.title() }}">
             </div>
             <div class="col-md-3">
                 <label for="afiliation_number" class="form-label">Número de afiliado</label>
                 <input type="text" class="form-control" name="affiliation_number" readonly value="{{ resident.affiliation_number }}">
             </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-12"></div>
             <div class="col-12">
                 <a href="{{ url_for('views.resident_search') }}" class="btn btn-primary">Volver</a>
                 <a href="{{ url_for('views.resident_edit', id = resident.id) }}" class="btn btn-primary">Editar</a>

@@ -4,7 +4,6 @@ from app.src.models import (
     Resident,
     resident_instance_from_dictionary,
     resident_update_from_dictionary,
-    resident_search_by_value,
     Medication,
     medication_instance_from_dictionary,
     medication_update_from_dictionary,
@@ -34,11 +33,12 @@ resident_context = {"active_item": "resident", "user": current_user}
 @login_required
 def resident_search():
     if request.method == "GET":
-        return render_template("resident_search.html", **resident_context)
+        resident_list = Resident.query.all()
+        return render_template("resident_search.html", resident_list = resident_list, **resident_context)
     elif request.method == "POST":
-        resident_list = resident_search_by_value(request.form.get("select_field"), request.form.get("imput_field"))
-        for resident in resident_list:
-            resident.to_show_in_html()
+        imput_field = request.form.get("imput_field")
+        resident_list = Resident.query.filter(or_(Resident.status.like(imput_field),Resident.nickname.like(imput_field),Resident.name.like(imput_field),
+        Resident.last_name.like(imput_field))).all()
         return render_template("resident_list.html", resident_list = resident_list, **resident_context)
 
 
@@ -46,8 +46,6 @@ def resident_search():
 @login_required
 def resident_list():
     resident_list = Resident.query.all()
-    for resident in resident_list:
-        resident.to_show_in_html()
     return render_template("resident_list.html", resident_list = resident_list, **resident_context)
 
 
@@ -55,7 +53,6 @@ def resident_list():
 @login_required
 def resident_details(id):
     resident = Resident.query.get(int(id))
-    resident.to_show_in_html()
     return render_template("resident_details.html", resident = resident, **resident_context)
 
 
@@ -76,7 +73,6 @@ def resident_new():
 def resident_edit(id):
     if request.method == "GET":
         resident = Resident.query.get(int(id))
-        resident.to_show_in_html()
         return render_template("resident_edit.html", resident = resident, **resident_context)
     elif request.method == "POST":
         resident_update_from_dictionary(request.form)
